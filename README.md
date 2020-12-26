@@ -1,6 +1,6 @@
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate?hosted_button_id=69L3MWGCKVMA6)
 
-# MFT_Browser
+# [MFT_Browser](https://github.com/kacos2000/MFT_Browser/releases/latest)
 
 Based on [$MFT Record Viewer](https://github.com/kacos2000/MFT_Record_Viewer)
 
