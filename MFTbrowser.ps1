@@ -786,14 +786,36 @@ Should match the 'File reference number' in fsutil"
 	
 								if ($type -eq "80000000")
 								{
+									# Cluster Size    Compression Unit    
+									# --------------------------------
+									# 512bytes        8kb (0x0200)
+									#  1kb           16kb (0x0400)
+									#  2kb           32kb (0x0800)
+									#  4kb           64kb (0x1000)
+									#  8kb           64kb (0x1000)
+									# 16kb           64kb (0x1000)
+									# 32kb           64kb (0x1000)
+									# 64kb           64kb (0x1000)
+									# https://docs.microsoft.com/en-us/archive/blogs/ntdebugging/understanding-ntfs-compression
+									
+									$compsizes = @{
+										'0000' = '0'
+										'0200' = '8kb'
+										'0400' = '16kb'
+										'0800' = '32kb'
+										'1000' = '64kb'
+									}
+									
 									# Compression Unit Size
 									$datacompsize = $data.Substring($residentcontentoffset + 34, 2)
 									$datacompsizeb = [System.Text.Encoding]::getencoding(28591).GetBytes($datacompsize)
-									[array]::reverse($datacompsizeb)
+									#[array]::reverse($datacompsizeb)
 									$datacompsizeh = [System.BitConverter]::ToString($datacompsizeb) -replace '-', ''
-									$datacompressionsize = [Convert]::TouInt16($datacompsizeh, 16)
-								
-									$ANodes.Nodes["($("Attribute" + $Attributeoffset))"].Nodes.Add("Compression_UnitSize", "[0x$(($residentcontentoffset + 34).tostring('X3'))] Compression Unit Size: $($datacompressionsize)")
+									#$datacompressionsize = [Convert]::TouInt16($datacompsizeh, 16)
+									
+									$compressionsize = if(!!$compsizes["$($datacompsizeh)"]){ $compsizes["$($datacompsizeh)"]}else{"0x$($datacompsizeh)"}
+									
+									$ANodes.Nodes["($("Attribute" + $Attributeoffset))"].Nodes.Add("Compression_UnitSize", "[0x$(($residentcontentoffset + 34).tostring('X3'))] Compression Unit Size: $($compressionsize)")
 									$ANodes.Nodes["($("Attribute" + $Attributeoffset))"].Nodes["Compression_UnitSize"].Tag = @("$($residentcontentoffset + 34)","2")
 								}
 							
@@ -1145,7 +1167,7 @@ Name:              (Variable)"
 											else { $atr20streamname = $null }
 											
 											# Add Attribute to list
-											$OffAttributeItems = $OffAttributes.Nodes.Add("AttributeType", "[0x$(($astart).tostring('X3'))] ID: ($($attrib_ID.ToString('0000#'))), Attribute: $($Attributes[$att_type])")
+											$OffAttributeItems = $OffAttributes.Nodes.Add("AttributeType", "[0x$(($astart).tostring('X3'))] ID: $($attrib_ID.ToString('0000#')), Attribute: $($Attributes[$att_type])")
 											$OffAttributeItems.ForeColor = 'DarkBlue'
 											#$OffAttributeItems.NodeFont = New-Object Drawing.Font($treeview1.Font, [Drawing.FontStyle]::Bold)
 											$OffAttributeItems.Tag = @("$astart", "$att_length")
@@ -3364,6 +3386,7 @@ This value is available starting with Windows 10 April 2018 Update."
 		# Start reading records
 		$stopWatch = New-Object -TypeName System.Diagnostics.Stopwatch
 		$stopWatch.Start()
+		$StreamList = [System.Collections.ArrayList]::new()
 		
 		$recordsinfo = foreach ($step in $list)
 		{
@@ -3469,11 +3492,11 @@ This value is available starting with Windows 10 April 2018 Update."
 				$recordbnr = [Convert]::TouInt64($midbh, 16)
 				
 				$Attributeoffset = $offfirst
-				$atinfo = $null
+				$atinfo = [System.Collections.ArrayList]::new()
 				$previousattributes = [System.Collections.ArrayList]::new()
-				$atinfo = if ($nextattribute -ne 0)
+				if ($nextattribute -ne 0)
 				{
-					for ($a = 0; $a -lt $nextattribute; $a++)
+				for ($a = 0; $a -lt $nextattribute; $a++)
 					{
 						# Attribute Type
 						$at = $data.Substring($Attributeoffset, 4)
@@ -3481,7 +3504,7 @@ This value is available starting with Windows 10 April 2018 Update."
 						$type = [System.BitConverter]::ToString($atb) -replace '-', ''
 						
 						# add to previous attributes list
-						[Void]$previousattributes.Add($type)
+						$null = $previousattributes.Add($type)
 						
 						# Attribute Length 
 						$ln = $data.Substring($Attributeoffset + 4, 4)
@@ -3540,6 +3563,9 @@ This value is available starting with Windows 10 April 2018 Update."
 							$prsqh = [System.BitConverter]::ToString($prsqb) -replace '-', ''
 							$prsqnr = [Convert]::TouInt16($prsqh, 16)
 							
+							# Make Parent ID
+							$pfid = "$($prsqnr.ToString('X4'))$($mftparentnr.ToString('X12'))"
+							
 							# File name length
 							$fnlength = $data.Substring($residentcontentoffset + 64, 1)
 							$fnlengthb = [System.Text.Encoding]::getencoding(28591).GetBytes($fnlength)
@@ -3554,62 +3580,67 @@ This value is available starting with Windows 10 April 2018 Update."
 							$fnnbh = [System.BitConverter]::ToString($fnnb)
 							$filespace = [Convert]::TouInt16($fnnbh, 16)
 							
-							if ($filespace -in (0, 1, 3) -and "$($prsqnr.ToString('X4'))$($mftparentnr.ToString('X12'))" -notin $atinfo.PFileID)
+							if ($filespace -in (0, 1, 3) -and $pfid -notin $atinfo.PFileID)
 							{
-								
+								if($pfid -in $atinfo.PFileID){continue}
 								# File name
 								$fn = $data.Substring($residentcontentoffset + 66, $fnamelength * 2)
 								$fnb = [System.Text.Encoding]::getencoding(28591).GetBytes($fn)
 								$fname = [System.Text.Encoding]::Unicode.GetString($fnb)
 								
-								[pscustomobject]@{
-									Parent = $mftparentnr
-									PSeqr  = $prsqnr
-									PFileID= "$($prsqnr.ToString('X4'))$($mftparentnr.ToString('X12'))"
-									Base   = $baserecord
-									BSeqNr = $baserecordsequence
-									fname  = $fname
-									}
+								$null = $atinfo.add((New-Object psobject -property @{
+											Parent  = $mftparentnr
+											PSeqr   = $prsqnr
+											PFileID = "$($prsqnr.ToString('X4'))$($mftparentnr.ToString('X12'))"
+											Base    = $baserecord
+											BSeqNr  = $baserecordsequence
+											fname   = $fname
+										}))
+									
 							#	break
 							}
-							elseif($type -eq '30000000' -and '20000000' -in $previousattributes -and "$($prsqnr.ToString('X4'))$($mftparentnr.ToString('X12'))" -notin $atinfo.PFileID) 
-									{
+							elseif($filespace -eq 2 -and $previousattributes.Contains('20000000') -and $pfid -notin $atinfo.PFileID) 
+								{
+								
+									if ($pfid -in $atinfo.PFileID) { continue }
 									# File name
 									$fn = $data.Substring($residentcontentoffset + 66, $fnamelength * 2)
 									$fnb = [System.Text.Encoding]::getencoding(28591).GetBytes($fn)
 									$fname = [System.Text.Encoding]::Unicode.GetString($fnb)
-									
-									[pscustomobject]@{
-										Parent  = $mftparentnr
-										PSeqr   = $prsqnr
-										PFileID = "$($prsqnr.ToString('X4'))$($mftparentnr.ToString('X12'))"
-										Base    = $baserecord
-										BSeqNr  = $baserecordsequence
-										fname   = $fname
-										}
+								
+								$null = $atinfo.add((New-Object psobject -property @{
+											Parent  = $mftparentnr
+											PSeqr   = $prsqnr
+											PFileID = "$($prsqnr.ToString('X4'))$($mftparentnr.ToString('X12'))"
+											Base    = $baserecord
+											BSeqNr  = $baserecordsequence
+											fname   = $fname
+										}))
 							#	break
 							}
 						}
+						# Continue and get any data stream names 
 						elseif ($type -eq '80000000' -and $previousattributes.Contains('30000000') -and ![String]::IsNullOrEmpty($StreamName))
 						{
 							if ($Streamname -notin ('$Corrupt', '$Config','$I30', '$T','$J','$O','$Q', '$TX','$TXF_DATA', '$TXF_DAA', '$Max', 'SII', '$SDH', '$SDS', '$Bad', '$Verify', 'WofCompressedData', '$DSC','$EFS'))
 							{
-								[pscustomobject]@{
-									Streamname = $StreamName
-								}
+								$null = $StreamList.Add((New-Object psobject -property @{ 'Step' = $step; 'FileID' = "$($sqcount.ToString('X4'))$($recordbnr.ToString('X12'))"; 'StreamName' = $StreamName }))
+								# https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/c54dec26-1551-4d3a-a0ea-4fa40f848eb3
 							}
 						} 
 						# get the next attribute offset
 						$Attributeoffset = $Attributeoffset + $length
 						if(($Attributeoffset + 65) -ge $logicalsz){break}
-					}
-				}
+						
+					} #end atinfo
+				} #end if next attribute nr not 0
+				
 				foreach ($fat in $atinfo){
 				[pscustomobject]@{
 						Step	  = $step
 						MFTRecord = $recordbnr
 						SeqNr	  = $sqcount
-						FileID    = "$($sqcount.ToString('X4'))$($recordbnr.ToString('X12'))"
+						FileID    = "$($sqcount.ToString('X4'))$($step.ToString('X12'))"
 						IsDir	  = $dir
 						InUse	  = $InUse
 						Base	  = $fat.baserecord
@@ -3618,8 +3649,7 @@ This value is available starting with Windows 10 April 2018 Update."
 						'Parent'  = $fat.Parent
 						PSeqNr    = $fat.PSeqr
 						fname	  = $fat.fname
-						Stream    = $fat.Streamname
-					}
+						}
 				}
 			  } # End cancel check
 			} # end foreach record
@@ -3639,7 +3669,7 @@ This value is available starting with Windows 10 April 2018 Update."
 			$maxdirs = $dirs.count
 			# List of files
 			$Status.Text = "Elapsed: $($stopWatch.Elapsed.Minutes) min - Sorting Files"
-			$filez = ($recordsinfo | Where-Object { $_.IsDir -ne '1' -and ![string]::IsNullOrEmpty($_.fname)} | sort -Property parent,fname)
+			$filez = ($recordsinfo | Where-Object { $_.IsDir -eq '0' -and ![string]::IsNullOrEmpty($_.fname)} | sort -Property parent,fname)
 			$maxfilez = $filez.count
 		
 			$checkbackdirs0 = [System.Collections.ArrayList]::new()
@@ -3686,7 +3716,7 @@ This value is available starting with Windows 10 April 2018 Update."
 					if ($d % 100 -eq 0)
 					{
 						$toolstripprogressbar1.PerformStep()
-						$Status.Text = "Elapsed: $($stopWatch.Elapsed.Minutes) min - #1 Building Directory tree - Dir $($d) of $($maxdirs)"
+						$Status.Text = "Elapsed: $($stopWatch.Elapsed.Minutes) min - #1/4 Building Directory tree - Dir $($d) of $($maxdirs)"
 					}
 					# Add nodes
 					if ($script:cancelreading -eq $false)
@@ -3697,16 +3727,7 @@ This value is available starting with Windows 10 April 2018 Update."
 								$parentnode[0].Nodes.Add("$($x.FileID)", "$($x.fname)")
 								$parentnode[0].Nodes["$($x.FileID)"].Tag = @("$([int]$x.Step)", "")
 								$parentnode[0].Nodes["$($x.FileID)"].ToolTipText = "MFT: Record: $($x.MFTRecord), SeqNr: $($x.SeqNr)"
-								
-							if(![System.String]::IsNullOrEmpty($recordsinfo.where{ $_.FileID -eq $x.FileID }.stream)){
-								$parentnode[0].Nodes.Add("Stream_$($x.FileID)", "$($x.fname):$($recordsinfo.where{ $_.FileID -eq $x.FileID }.stream[0])")
-								$parentnode[0].Nodes["Stream_$($x.FileID)"].ForeColor = 'Green'
-								$parentnode[0].Nodes["Stream_$($x.FileID)"].Tag = @("$([int]$x.Step)", "")
-								$parentnode[0].Nodes["Stream_$($x.FileID)"].ToolTipText = "MFT: Record: $($x.MFTRecord), SeqNr: $($x.SeqNr)"
-								if ($x.inUse -eq '1')
-								{ $parentnode[0].Nodes["Stream_$($x.FileID)"].ImageIndex = 0 }
-								else{ $parentnode[0].Nodes["Stream_$($x.FileID)"].ImageIndex = 4}
-							}
+							
 							# add ico according to allocation status
 							if ($x.inUse -eq '1')
 							{
@@ -3768,7 +3789,7 @@ This value is available starting with Windows 10 April 2018 Update."
 							if ($u % 50 -eq 0)
 							{
 								$toolstripprogressbar1.PerformStep()
-								$Status.Text = "Elapsed: $($stopWatch.Elapsed.Minutes) min - #2 Building Directory tree - Dir $($u) of $($chkcount)"
+								$Status.Text = "Elapsed: $($stopWatch.Elapsed.Minutes) min - #2/4 Building Directory tree - Dir $($u) of $($chkcount)"
 							}
 							if ($script:cancelreading -eq $false)
 							{
@@ -3778,16 +3799,6 @@ This value is available starting with Windows 10 April 2018 Update."
 									$parentnode[0].Nodes.Add("$($cb.FileID)", "$($cb.fname)")
 									$parentnode[0].Nodes["$($cb.FileID)"].Tag = @("$([int]$cb.Step)", "")
 									$parentnode[0].Nodes["$($cb.FileID)"].ToolTipText = "MFT: Record: $($cb.MFTRecord), SeqNr: $($cb.SeqNr)"
-									if (![System.String]::IsNullOrEmpty($recordsinfo.where{ $_.FileID -eq $cb.FileID }.stream))
-									{
-										$parentnode[0].Nodes.Add("Stream_$($cb.FileID)", "$($cb.fname):$($recordsinfo.where{ $_.FileID -eq $cb.FileID }.stream[0])")
-										$parentnode[0].Nodes["Stream_$($cb.FileID)"].ForeColor = 'Green'
-										$parentnode[0].Nodes["Stream_$($cb.FileID)"].Tag = @("$([int]$cb.Step)", "")
-										$parentnode[0].Nodes["Stream_$($cb.FileID)"].ToolTipText = "MFT: Record: $($cb.MFTRecord), SeqNr: $($cb.SeqNr)"
-										if ($cb.inUse -eq '1')
-										{ $parentnode[0].Nodes["Stream_$($cb.FileID)"].ImageIndex = 0 }
-										else{ $parentnode[0].Nodes["Stream_$($cb.FileID)"].ImageIndex = 4}
-									}
 									# add ico according to allocation status
 									if ($cb.inUse -eq '1')
 									{
@@ -3847,7 +3858,7 @@ This value is available starting with Windows 10 April 2018 Update."
 						if ($u % 50 -eq 0)
 						{
 							$toolstripprogressbar1.PerformStep()
-							$Status.Text = "Elapsed: $($stopWatch.Elapsed.Minutes) min - #3 Building Directory tree - Dir $($u) of $($chkcount)"
+							$Status.Text = "Elapsed: $($stopWatch.Elapsed.Minutes) min - #3/4 Building Directory tree - Dir $($u) of $($chkcount)"
 						}
 						if ($script:cancelreading -eq $false)
 						{
@@ -3857,16 +3868,7 @@ This value is available starting with Windows 10 April 2018 Update."
 								$parentnode[0].Nodes.Add("$($cb.FileID)", "$($cb.fname)")
 								$parentnode[0].Nodes["$($cb.FileID)"].Tag = @("$([int]$cb.Step)", "")
 								$parentnode[0].Nodes["$($cb.FileID)"].ToolTipText = "MFT: Record: $($cb.MFTRecord), SeqNr: $($cb.SeqNr)"
-								if (![System.String]::IsNullOrEmpty($recordsinfo.where{ $_.FileID -eq $cb.FileID }.stream))
-								{
-									$parentnode[0].Nodes.Add("Stream_$($cb.FileID)", "$($cb.fname):$($recordsinfo.where{ $_.FileID -eq $cb.FileID }.stream[0])")
-									$parentnode[0].Nodes["Stream_$($cb.FileID)"].ForeColor = 'Green'
-									$parentnode[0].Nodes["Stream_$($cb.FileID)"].Tag = @("$([int]$cb.Step)", "")
-									$parentnode[0].Nodes["Stream_$($cb.FileID)"].ToolTipText = "MFT: Record: $($cb.MFTRecord), SeqNr: $($cb.SeqNr)"
-									if ($cb.inUse -eq '1')
-									{ $parentnode[0].Nodes["Stream_$($cb.FileID)"].ImageIndex = 0 }
-									else{ $parentnode[0].Nodes["Stream_$($cb.FileID)"].ImageIndex = 4}
-								}
+								
 								# add ico according to allocation status
 								if ($cb.inUse -eq '1')
 								{
@@ -3881,16 +3883,7 @@ This value is available starting with Windows 10 April 2018 Update."
 								$unknown.Nodes.Add("$($cb.FileID)", "$($cb.fname)")
 								$unknown.Nodes["$($cb.FileID)"].Tag = @("$([int]$cb.Step)", "")
 								$unknown.Nodes["$($cb.FileID)"].ToolTipText = "MFT: Record: $($cb.MFTRecord), SeqNr: $($cb.SeqNr)"
-								if (![System.String]::IsNullOrEmpty($recordsinfo.where{ $_.FileID -eq $cb.FileID }.stream))
-								{
-									$unknown.Nodes.Add("Stream_$($cb.FileID)", "$($cb.fname):$($recordsinfo.where{ $_.FileID -eq $cb.FileID }.stream[0]))")
-									$unknown.Nodes["Stream_$($cb.FileID)"].ForeColor = 'Green'
-									$unknown.Nodes["Stream_$($cb.FileID)"].Tag = @("$([int]$cb.Step)", "")
-									$unknown.Nodes["Stream_$($cb.FileID)"].ToolTipText = "MFT: Record: $($cb.MFTRecord), SeqNr: $($cb.SeqNr)"
-									if ($cb.inUse -eq '1')
-									{ $unknown.Nodes["Stream_$($cb.FileID)"].ImageIndex = 0 }
-									else{ $unknown.Nodes["Stream_$($cb.FileID)"].ImageIndex = 4}
-								}
+								
 								if ($cb.inUse -eq '1')
 								{
 									$unknown.Nodes["$($cb.FileID)"].ImageIndex = 0
@@ -3922,7 +3915,7 @@ This value is available starting with Windows 10 April 2018 Update."
 				$treeview2.EndUpdate()
 			} #end checkback check
 		} # end of directory count check
-		
+		$Status.Text = "Elapsed: $($stopWatch.Elapsed.Minutes) min"
 		if ($maxfilez -ge 1)
 		{
 			# Add files to directory nodes ...
@@ -3945,7 +3938,7 @@ This value is available starting with Windows 10 April 2018 Update."
 					if ($f % 100 -eq 0)
 					{
 						$toolstripprogressbar1.PerformStep()
-						$Status.Text = "Elapsed: $($stopWatch.Elapsed.Minutes) min - Populating directory nodes with Files: $($f) of $($maxfilez)"
+						$Status.Text = "Elapsed: $($stopWatch.Elapsed.Minutes) min -#4/4 Populating directory nodes with Files: $($f) of $($maxfilez)"
 					}
 					if ($script:cancelreading -ne $true)
 					{
@@ -3954,17 +3947,7 @@ This value is available starting with Windows 10 April 2018 Update."
 							$parentnode[0].Nodes.Add("$($fi.FileID)", "$($fi.fname)")
 							$parentnode[0].Nodes["$($fi.FileID)"].Tag = @("$([int]$fi.Step)", "")
 							$parentnode[0].Nodes["$($fi.FileID)"].ToolTipText = "MFT: Record: $($fi.MFTRecord), SeqNr: $($fi.SeqNr)"
-							if (![System.String]::IsNullOrEmpty($recordsinfo.where{ $_.FileID -eq $fi.FileID }.stream))
-							{
-								$parentnode[0].Nodes.Add("Stream_$($fi.FileID)", "$($fi.fname):$($recordsinfo.where{ $_.FileID -eq $fi.FileID }.stream)")
-								$parentnode[0].Nodes["Stream_$($fi.FileID)"].ForeColor = 'Green'
-								$parentnode[0].Nodes["Stream_$($fi.FileID)"].Tag = @("$([int]$fi.Step)", "")
-								$parentnode[0].Nodes["Stream_$($fi.FileID)"].ToolTipText = "MFT: Record: $($fi.MFTRecord), SeqNr: $($fi.SeqNr)"
-								if ($fi.inUse -eq '1')
-								{ $parentnode[0].Nodes["Stream_$($fi.FileID)"].ImageIndex = 2 }
-								else{ $parentnode[0].Nodes["Stream_$($fi.FileID)"].ImageIndex = 1}
-								
-							}
+							# add appropriate ico
 							if ($fi.inUse -eq '1')
 							{
 								$parentnode[0].Nodes["$($fi.FileID)"].ImageIndex = 2
@@ -3973,22 +3956,39 @@ This value is available starting with Windows 10 April 2018 Update."
 							{
 								$parentnode[0].Nodes["$($fi.FileID)"].ImageIndex = 1
 							}
+							# Add any non-system named streams
+							if (!!$streamlist.where{ $_.FileID -eq $fi.FileID }.StreamName)
+							{
+								foreach($strm in $streamlist.where{ $_.FileID -eq $fi.FileID }.StreamName)
+							{
+								$parentnode[0].Nodes.Add("$($strm.length)Stream_$($fi.FileID)", "$($fi.fname):$($strm)")
+								$parentnode[0].Nodes["$($strm.length)Stream_$($fi.FileID)"].ForeColor = 'Green'
+								$parentnode[0].Nodes["$($strm.length)Stream_$($fi.FileID)"].Tag = @("$([int]$fi.Step)", "")
+								$parentnode[0].Nodes["$($strm.length)Stream_$($fi.FileID)"].ToolTipText = "MFT: Record: $($fi.MFTRecord), SeqNr: $($fi.SeqNr)"
+								if ($fi.inUse -eq '1')
+									 { $parentnode[0].Nodes["$($strm.length)Stream_$($fi.FileID)"].ImageIndex = 2 }
+								else { $parentnode[0].Nodes["$($strm.length)Stream_$($fi.FileID)"].ImageIndex = 1 }
+							}
+						}
+						
 						}
 						else
 						{
 							$unknown.Nodes.Add("$($fi.FileID)", "$($fi.fname)")
 							$unknown.Nodes["$($fi.FileID)"].Tag = @("$([int]$fi.Step)", "")
 							$unknown.Nodes["$($fi.FileID)"].ToolTipText = "MFT: Record: $($fi.MFTRecord), SeqNr: $($fi.SeqNr)"
-							if (![System.String]::IsNullOrEmpty($recordsinfo.where{ $_.FileID -eq $fi.FileID }.stream))
+							if (!!$streamlist.where{ $_.FileID -eq $fi.FileID }.StreamName)
 							{
-								$unknown.Nodes.Add("Stream_$($fi.FileID)", "$($fi.fname):$($recordsinfo.where{ $_.FileID -eq $fi.FileID }.stream)")
-								$unknown.Nodes["Stream_$($fi.FileID)"].ForeColor = 'Green'
-								$unknown.Nodes["Stream_$($fi.FileID)"].Tag = @("$([int]$fi.Step)", "")
-								$unknown.Nodes["Stream_$($fi.FileID)"].ToolTipText = "MFT: Record: $($fi.MFTRecord), SeqNr: $($fi.SeqNr)"
-								if ($fi.inUse -eq '1')
-								{ $unknown.Nodes["Stream_$($fi.FileID)"].ImageIndex = 2 }
-								else{ $unknown.Nodes["Stream_$($fi.FileID)"].ImageIndex = 1}
-								
+								foreach ($strm in $streamlist.where{ $_.FileID -eq $fi.FileID }.StreamName)
+								{
+									$unknown.Nodes.Add("$($strm.length)Stream_$($fi.FileID)", "$($fi.fname):$($strm)")
+									$unknown.Nodes["$($strm.length)Stream_$($fi.FileID)"].ForeColor = 'Green'
+									$unknown.Nodes["$($strm.length)Stream_$($fi.FileID)"].Tag = @("$([int]$fi.Step)", "")
+									$unknown.Nodes["$($strm.length)Stream_$($fi.FileID)"].ToolTipText = "MFT: Record: $($fi.MFTRecord), SeqNr: $($fi.SeqNr)"
+									if ($fi.inUse -eq '1')
+										 { $unknown.Nodes["$($strm.length)Stream_$($fi.FileID)"].ImageIndex = 2 }
+									else { $unknown.Nodes["$($strm.length)Stream_$($fi.FileID)"].ImageIndex = 1 }
+								}
 							}
 							if ($fi.inUse -eq '1')
 							{
@@ -6135,7 +6135,7 @@ AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj00LjAuMC4wLCBD
 dWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABNTeXN0
 ZW0uRHJhd2luZy5JY29uAgAAAAhJY29uRGF0YQhJY29uU2l6ZQcEAhNTeXN0ZW0uRHJhd2luZy5T
 aXplAgAAAAIAAAAJAwAAAAX8////E1N5c3RlbS5EcmF3aW5nLlNpemUCAAAABXdpZHRoBmhlaWdo
-dAAACAgCAAAAQAAAAEAAAAAPAwAAAK3tAgACAAABAAsAMDAAAAEACACoDgAAtgAAACAgAAABAAgA
+dAAACAgCAAAAAAAAAAAAAAAPAwAAAK3tAgACAAABAAsAMDAAAAEACACoDgAAtgAAACAgAAABAAgA
 qAgAAF4PAAAQEAAAAQAIAGgFAAAGGAAAAAAAAAEAIAAHYgAAbh0AAICAAAABACAAKAgBAHV/AABg
 YAAAAQAgAKiUAACdhwEASEgAAAEAIACIVAAARRwCAEBAAAABACAAKEIAAM1wAgAwMAAAAQAgAKgl
 AAD1sgIAICAAAAEAIACoEAAAndgCABAQAAABACAAaAQAAEXpAgAoAAAAMAAAAGAAAAABAAgAAAAA
@@ -9574,7 +9574,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAEAAAs='))
 	[void]$splitcontainer1.Panel1.Controls.Add($treeview1)
 	[void]$splitcontainer1.Panel2.Controls.Add($splitcontainer2)
 	$splitcontainer1.Size = New-Object System.Drawing.Size(2531, 1641)
-	$splitcontainer1.SplitterDistance = 937
+	$splitcontainer1.SplitterDistance = 936
 	$splitcontainer1.SplitterWidth = 6
 	$splitcontainer1.TabIndex = 3
 	$splitcontainer1.TabStop = $False
@@ -9660,7 +9660,7 @@ dD+HD+5i324JOyQ++Hp7sWnjWtav8WCDp4c74D+XIPwBF8beaT1+/VgAAAAASUVORK5CYIIL'))
 	$treeview1.Margin = '28, 24, 28, 24'
 	$treeview1.Name = 'treeview1'
 	$treeview1.ShowNodeToolTips = $True
-	$treeview1.Size = New-Object System.Drawing.Size(933, 1637)
+	$treeview1.Size = New-Object System.Drawing.Size(932, 1637)
 	$treeview1.TabIndex = 0
 	$treeview1.add_BeforeSelect($treeview1_BeforeSelect)
 	$treeview1.add_AfterSelect($treeview1_AfterSelect)
@@ -9680,7 +9680,7 @@ dD+HD+5i324JOyQ++Hp7sWnjWtav8WCDp4c74D+XIPwBF8beaT1+/VgAAAAASUVORK5CYIIL'))
 	$richtextbox1.Name = 'richtextbox1'
 	$richtextbox1.ReadOnly = $True
 	$richtextbox1.ShowSelectionMargin = $True
-	$richtextbox1.Size = New-Object System.Drawing.Size(1584, 376)
+	$richtextbox1.Size = New-Object System.Drawing.Size(1585, 376)
 	$richtextbox1.TabIndex = 0
 	$richtextbox1.Text = ''
 	#
@@ -9754,7 +9754,7 @@ dD+HD+5i324JOyQ++Hp7sWnjWtav8WCDp4c74D+XIPwBF8beaT1+/VgAAAAASUVORK5CYIIL'))
 	$datagridview1.ShowCellErrors = $False
 	$datagridview1.ShowEditingIcon = $False
 	$datagridview1.ShowRowErrors = $False
-	$datagridview1.Size = New-Object System.Drawing.Size(1584, 1251)
+	$datagridview1.Size = New-Object System.Drawing.Size(1585, 1251)
 	$datagridview1.TabIndex = 1
 	$datagridview1.Visible = $False
 	$datagridview1.add_CellMouseEnter($datagridview1_CellMouseEnter)
@@ -13384,7 +13384,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAEAAAs='))
 	[void]$splitcontainer2.Panel1.Controls.Add($toolstrip1)
 	[void]$splitcontainer2.Panel1.Controls.Add($richtextbox1)
 	[void]$splitcontainer2.Panel2.Controls.Add($datagridview1)
-	$splitcontainer2.Size = New-Object System.Drawing.Size(1588, 1641)
+	$splitcontainer2.Size = New-Object System.Drawing.Size(1589, 1641)
 	$splitcontainer2.SplitterDistance = 380
 	$splitcontainer2.SplitterWidth = 6
 	$splitcontainer2.TabIndex = 3
@@ -13734,7 +13734,7 @@ V3r+l7leIiAvDHlrTQXSM4H5tGn/AjkLWg2DRQjrAAAAAElFTkSuQmCCCw=='))
 AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAu
 MC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAA
 ACZTeXN0ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkD
-AAAADwMAAAAeCwAAAk1TRnQBSQFMAgEBBQEAAVABAAFQAQABEAEAARABAAT/AQkBAAj/AUIBTQE2
+AAAADwMAAAAeCwAAAk1TRnQBSQFMAgEBBQEAAVgBAAFYAQABEAEAARABAAT/AQkBAAj/AUIBTQE2
 AQQGAAE2AQQCAAEoAwABQAMAASADAAEBAQABCAYAAQgYAAGAAgABgAMAAoABAAGAAwABgAEAAYAB
 AAKAAgADwAEAAcAB3AHAAQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEA
 AykBAANVAQADTQEAA0IBAAM5AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8B
@@ -17765,8 +17765,8 @@ Main ($CommandLine)
 # SIG # Begin signature block
 # MIIfcAYJKoZIhvcNAQcCoIIfYTCCH10CAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCZEfLZk4TF2t9U
-# goh32z6pvzuE0o2zPz73yY5iTq50A6CCGf4wggQVMIIC/aADAgECAgsEAAAAAAEx
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBwF1xnlsTHYKJh
+# he1MzOUFWz5HxW3afzyQ415bL9BoT6CCGf4wggQVMIIC/aADAgECAgsEAAAAAAEx
 # icZQBDANBgkqhkiG9w0BAQsFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3Qg
 # Q0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UEAxMKR2xvYmFsU2ln
 # bjAeFw0xMTA4MDIxMDAwMDBaFw0yOTAzMjkxMDAwMDBaMFsxCzAJBgNVBAYTAkJF
@@ -17909,26 +17909,26 @@ Main ($CommandLine)
 # R3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9T
 # ZWN0aWdvIExpbWl0ZWQxJDAiBgNVBAMTG1NlY3RpZ28gUlNBIENvZGUgU2lnbmlu
 # ZyBDQQIRALjpohQ9sxfPAIfj9za0FgUwDQYJYIZIAWUDBAIBBQCgTDAZBgkqhkiG
-# 9w0BCQMxDAYKKwYBBAGCNwIBBDAvBgkqhkiG9w0BCQQxIgQgc/V9PlXnDW67mgCD
-# a0620oT4kuzbs4KDGpRBNBZjvPcwDQYJKoZIhvcNAQEBBQAEggEAOtrkBhSYjkA1
-# uFZ9dglQ6rHsQ9e+1V/hQPL2Qasdq3mE5S1WuGJWkm34vzbct8wvLf5fy9rivzTZ
-# ozfOQDBrGK3QtPglrcJwhoT0sebq5u3LVVNw9O2CdQBpz+cyfpvK2pW1MqFWID4L
-# ISXLRc+r0Mps7jDPUR0PabEDo+5I9mercyaIUfCCRQHTN3e/IuTYFPnmWwstS3OE
-# VCQYjLGFGw8Yu8Y9BwoZMfbOHpUGqajUbIZLQu62LyWNRRR0MMqKMYNZAhzzXYD1
-# ztOYM9J5524T9I0AB9pseSFLzDUbEPO5UIThwZWtk/l7nkz1z8gIJlWheE8O2SWV
-# Y550Rgn1VqGCArkwggK1BgkqhkiG9w0BCQYxggKmMIICogIBATBrMFsxCzAJBgNV
+# 9w0BCQMxDAYKKwYBBAGCNwIBBDAvBgkqhkiG9w0BCQQxIgQg9RN78SiOZZsQq5Ti
+# UJ4SQnB4eBZjgViN1R9ajmBuQN4wDQYJKoZIhvcNAQEBBQAEggEAeG8Lp9ixRxhZ
+# s6sCZr0DkGfBtYh5ILylY63Smly6LxQPWEG4rz+/F2vEGR0G/DYyHLiCo4m8UZBd
+# KWqTmMR5Tci3JNZUF/NhMiPzHQZpvdkdhCgnPQg92SF3VpWL04bsrd2InVRcV7nx
+# 2BfLS5R3Al6sUKgtSOsZT+mMNWwx2nUZ+BpKpt9Rt5LGBqcOJ9t63TWhANfj9Gk9
+# RqZL0OuwW2NYw4M3LRzZM1Uk02EMWVtAiW5IEWhtev4CEXzC4boS0a8PW6UQu4Ig
+# 7SU7eo5Fx+0GWBA6KH9Z+C0L2Al+5W9FQ1KLaCtrD27pcAClezRupC8bsO24BUn9
+# 6+lZ8TsnNaGCArkwggK1BgkqhkiG9w0BCQYxggKmMIICogIBATBrMFsxCzAJBgNV
 # BAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
 # YWxTaWduIFRpbWVzdGFtcGluZyBDQSAtIFNIQTI1NiAtIEcyAgwkVLh/HhRTrTf6
 # oXgwDQYJYIZIAWUDBAIBBQCgggEMMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEw
-# HAYJKoZIhvcNAQkFMQ8XDTIwMTIzMDAxMzg1NVowLwYJKoZIhvcNAQkEMSIEIKMs
-# FwGq8XRTxGvMMdy8c84+j/zKG3dcfy5d3aqM23pzMIGgBgsqhkiG9w0BCRACDDGB
+# HAYJKoZIhvcNAQkFMQ8XDTIwMTIzMDE5MzcyN1owLwYJKoZIhvcNAQkEMSIEIMhe
+# +D8ru0gCAW8WTWvvkPCX8aUV91wlVjfIaIH/yiwqMIGgBgsqhkiG9w0BCRACDDGB
 # kDCBjTCBijCBhwQUPsdm1dTUcuIbHyFDUhwxt5DZS2gwbzBfpF0wWzELMAkGA1UE
 # BhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExMTAvBgNVBAMTKEdsb2Jh
 # bFNpZ24gVGltZXN0YW1waW5nIENBIC0gU0hBMjU2IC0gRzICDCRUuH8eFFOtN/qh
-# eDANBgkqhkiG9w0BAQEFAASCAQBgfPxNUHWDma+5JZ7q9FMwd61Vlee+Wn3ZUCnu
-# /Du0Z6IpSQWj+wAjJvrutvGwsE/phMdBSpVTimnFen1NinaM6yGmW++JNYsMD6F5
-# iYEZMeGBleS+cr//St313OB6LHYulh+4zqYytyMlTx+Qe4mitjnTn5ZJg6P3HloX
-# 99JnOpAkh/Cl7hdv0NXHgZ4I+/C+xEKDl0kzPwhK8NoA6glzC9owChVTm7HhznUq
-# plxopYMFJnfRrwdVRbJdquB8WZdnhrb7xeu2eoTujbjGQbUhB9r/V4DCPJ4/7vlE
-# GStlReyPV3VzUNfJ5zuiHgx6Xm4PR3kHcWO7kI0lwQHCwLJm
+# eDANBgkqhkiG9w0BAQEFAASCAQA809GbmxqziwCUTz/ow0cYJZzyoY84/W+RNL67
+# FxNHChxxluk8CdWbcZGUXzQ2Kj/NbOXuKspjKRBjtdGrjhxmX7hJsS4uztOhpg0P
+# T8JRxBDTt0uP0FNgXi/HeutvsBRd2SBaLXXmMQb9Obuw5H+3Pl43KrkPMCGcH8WR
+# B21HRycjQFAosHb8BeX+CoGwyQ3l3tC3HuPyS9yBoQpYFGi4k1Hcrz2LhYU8bHpC
+# jD+qGhRh3USk7CKsIJl8R9WZ73JQ38R/V7042u2lsM9rDTenqSUbS3PyVMY57TGL
+# XTTd44wZ9hHtbFHabXvMH3ufPFBEDBMdiEIZOWAiN34r8Hno
 # SIG # End signature block
