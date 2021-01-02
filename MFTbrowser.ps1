@@ -4021,7 +4021,7 @@ This value is available starting with Windows 10 April 2018 Update."
 								$toolstripprogressbar1.PerformStep()
 								$Status.Text = "Elapsed: $($stopWatch.Elapsed.Hours.ToString('0#')):$($stopWatch.Elapsed.Minutes.ToString('0#')) - Adding ADStreams: $($s) of $($streamcount)"
 							}
-							$file_record = $recordsinfo.where{ $_.step -eq $st.step }
+							$file_record = $recordsinfo.where{ $_.FileID -eq $st.FileID }
 							$Null = $parentnode[0].Nodes.Add("$($st.StreamName.length)Stream_$($st.FileID)", "$($file_record.fname):$($st.StreamName)")
 							$parentnode[0].Nodes["$($st.StreamName.length)Stream_$($st.FileID)"].ForeColor = 'Green'
 							$parentnode[0].Nodes["$($st.StreamName.length)Stream_$($st.FileID)"].Tag = @("$([int]$st.Step)", "")
@@ -9696,7 +9696,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAEAAAs='))
 	[void]$splitcontainer1.Panel1.Controls.Add($treeview1)
 	[void]$splitcontainer1.Panel2.Controls.Add($splitcontainer2)
 	$splitcontainer1.Size = New-Object System.Drawing.Size(2531, 1641)
-	$splitcontainer1.SplitterDistance = 932
+	$splitcontainer1.SplitterDistance = 931
 	$splitcontainer1.SplitterWidth = 6
 	$splitcontainer1.TabIndex = 3
 	$splitcontainer1.TabStop = $False
@@ -9782,7 +9782,7 @@ dD+HD+5i324JOyQ++Hp7sWnjWtav8WCDp4c74D+XIPwBF8beaT1+/VgAAAAASUVORK5CYIIL'))
 	$treeview1.Margin = '28, 24, 28, 24'
 	$treeview1.Name = 'treeview1'
 	$treeview1.ShowNodeToolTips = $True
-	$treeview1.Size = New-Object System.Drawing.Size(928, 1637)
+	$treeview1.Size = New-Object System.Drawing.Size(927, 1637)
 	$treeview1.TabIndex = 0
 	$treeview1.add_BeforeSelect($treeview1_BeforeSelect)
 	$treeview1.add_AfterSelect($treeview1_AfterSelect)
@@ -9802,7 +9802,7 @@ dD+HD+5i324JOyQ++Hp7sWnjWtav8WCDp4c74D+XIPwBF8beaT1+/VgAAAAASUVORK5CYIIL'))
 	$richtextbox1.Name = 'richtextbox1'
 	$richtextbox1.ReadOnly = $True
 	$richtextbox1.ShowSelectionMargin = $True
-	$richtextbox1.Size = New-Object System.Drawing.Size(1589, 376)
+	$richtextbox1.Size = New-Object System.Drawing.Size(1590, 376)
 	$richtextbox1.TabIndex = 0
 	$richtextbox1.Text = ''
 	#
@@ -9876,7 +9876,7 @@ dD+HD+5i324JOyQ++Hp7sWnjWtav8WCDp4c74D+XIPwBF8beaT1+/VgAAAAASUVORK5CYIIL'))
 	$datagridview1.ShowCellErrors = $False
 	$datagridview1.ShowEditingIcon = $False
 	$datagridview1.ShowRowErrors = $False
-	$datagridview1.Size = New-Object System.Drawing.Size(1589, 1251)
+	$datagridview1.Size = New-Object System.Drawing.Size(1590, 1251)
 	$datagridview1.TabIndex = 1
 	$datagridview1.Visible = $False
 	$datagridview1.add_CellMouseEnter($datagridview1_CellMouseEnter)
@@ -13506,7 +13506,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAEAAAs='))
 	[void]$splitcontainer2.Panel1.Controls.Add($toolstrip1)
 	[void]$splitcontainer2.Panel1.Controls.Add($richtextbox1)
 	[void]$splitcontainer2.Panel2.Controls.Add($datagridview1)
-	$splitcontainer2.Size = New-Object System.Drawing.Size(1593, 1641)
+	$splitcontainer2.Size = New-Object System.Drawing.Size(1594, 1641)
 	$splitcontainer2.SplitterDistance = 380
 	$splitcontainer2.SplitterWidth = 6
 	$splitcontainer2.TabIndex = 3
@@ -13856,7 +13856,7 @@ V3r+l7leIiAvDHlrTQXSM4H5tGn/AjkLWg2DRQjrAAAAAElFTkSuQmCCCw=='))
 AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAu
 MC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAA
 ACZTeXN0ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkD
-AAAADwMAAAAoCwAAAk1TRnQBSQFMAgEBBQEAAXgBAAF4AQABEAEAARABAAT/AQkBAAj/AUIBTQE2
+AAAADwMAAAAoCwAAAk1TRnQBSQFMAgEBBQEAAYABAAGAAQABEAEAARABAAT/AQkBAAj/AUIBTQE2
 AQQGAAE2AQQCAAEoAwABQAMAASADAAEBAQABCAYAAQgYAAGAAgABgAMAAoABAAGAAwABgAEAAYAB
 AAKAAgADwAEAAcAB3AHAAQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEA
 AykBAANVAQADTQEAA0IBAAM5AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8B
@@ -17887,8 +17887,8 @@ Main ($CommandLine)
 # SIG # Begin signature block
 # MIIfcAYJKoZIhvcNAQcCoIIfYTCCH10CAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCLOMHhTlDQPdys
-# PxKnN+/XHwouMjphuidixZlrqxpbKaCCGf4wggQVMIIC/aADAgECAgsEAAAAAAEx
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCC09w4Jb9uEbiDb
+# drpmG1KS0jIPvDYsNrD/02vqyJWduKCCGf4wggQVMIIC/aADAgECAgsEAAAAAAEx
 # icZQBDANBgkqhkiG9w0BAQsFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3Qg
 # Q0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UEAxMKR2xvYmFsU2ln
 # bjAeFw0xMTA4MDIxMDAwMDBaFw0yOTAzMjkxMDAwMDBaMFsxCzAJBgNVBAYTAkJF
@@ -18031,26 +18031,26 @@ Main ($CommandLine)
 # R3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9T
 # ZWN0aWdvIExpbWl0ZWQxJDAiBgNVBAMTG1NlY3RpZ28gUlNBIENvZGUgU2lnbmlu
 # ZyBDQQIRALjpohQ9sxfPAIfj9za0FgUwDQYJYIZIAWUDBAIBBQCgTDAZBgkqhkiG
-# 9w0BCQMxDAYKKwYBBAGCNwIBBDAvBgkqhkiG9w0BCQQxIgQgr3rZ45L205fuBvql
-# SjYna5uVTC4g1aW5P1Y2+sXU0YUwDQYJKoZIhvcNAQEBBQAEggEAd6yCIAuRLIUw
-# nbfM9yw7YRKHNbPCgvuWornmIOPESvmgRw1ucCBOVsrk3/L3BezBCL2YfiTNnilT
-# QxTxAjRIqR7n8wruFmzg56kJrPE/S4n78HVihowhKtj0RYNf/FLNNbe7L0+QquDd
-# 908IjtXEDYtNGt35oVJ5G+3RmAgZzEGsQG8mtCbuQweBcxQ8THgLHi+jsCx83H8I
-# gPhwBs/q1oS74FR6PWCtEfi/BAmCwEO2Ar1Wdoxfr3wESzlP7fKnXbuZR3aggr9A
-# 5KLk+clB55pjvnoNV9UMZygsfUwEY7UWSS/vZq1vjz18kokSn7sFOfGBwdPg5rLX
-# WkxwrgawaqGCArkwggK1BgkqhkiG9w0BCQYxggKmMIICogIBATBrMFsxCzAJBgNV
+# 9w0BCQMxDAYKKwYBBAGCNwIBBDAvBgkqhkiG9w0BCQQxIgQgYWm1s1sjckxGUQkP
+# kkdKrVD6fTLcMWk+fbf5seJHYucwDQYJKoZIhvcNAQEBBQAEggEATr4hOxXVUNaU
+# o43NMTA4ELrG77u/Ao8vo1bjg1Z98VDEhDYbydQOiqUkb7mFuZEKvnZiBLhYFyfN
+# iYWo+fMtJL2dPFxN556YHuv9O5mLIRufsc5cqKCYEVEZ5WXewleIYbzsKGZqu2WT
+# BLb348cJzlnt/sADZvQvVBQTc31mU929cDo62rWicLRDVuvZWpR8h2Bf335ljycz
+# k6wQ5Fmzi5opZTi469cedBMyzKYeG01Adfnqge9IMZXxsPorrz9f9mc2Ok5re2Rl
+# FXvMtIW4IOijkmYBB41uUUmTNLImiVZM1KsTfoLmef2PyS7UhjrhvfjrK1SQmVa8
+# uRZr4h2K76GCArkwggK1BgkqhkiG9w0BCQYxggKmMIICogIBATBrMFsxCzAJBgNV
 # BAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
 # YWxTaWduIFRpbWVzdGFtcGluZyBDQSAtIFNIQTI1NiAtIEcyAgwkVLh/HhRTrTf6
 # oXgwDQYJYIZIAWUDBAIBBQCgggEMMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEw
-# HAYJKoZIhvcNAQkFMQ8XDTIxMDEwMTIzNTYyOVowLwYJKoZIhvcNAQkEMSIEIMiJ
-# nItTwcRF/pRf2SYYSG+NbPf9ps/x+J6Nl9gLw+EaMIGgBgsqhkiG9w0BCRACDDGB
+# HAYJKoZIhvcNAQkFMQ8XDTIxMDEwMjAwMTcxNlowLwYJKoZIhvcNAQkEMSIEICQq
+# JtrbRfI6TPPqExhUM9Dx2KGuMsJiCOfL5uQq8pBGMIGgBgsqhkiG9w0BCRACDDGB
 # kDCBjTCBijCBhwQUPsdm1dTUcuIbHyFDUhwxt5DZS2gwbzBfpF0wWzELMAkGA1UE
 # BhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExMTAvBgNVBAMTKEdsb2Jh
 # bFNpZ24gVGltZXN0YW1waW5nIENBIC0gU0hBMjU2IC0gRzICDCRUuH8eFFOtN/qh
-# eDANBgkqhkiG9w0BAQEFAASCAQACms0QERbFalV6dIUYS1/eU5sxoCmN4+PYqhLJ
-# kuqw6zXqydqDET3KWPafxdG/WChOYKEYnJFg+fVbvHQbCVlxiWI51Dg4U2GuGX8o
-# U587mEB0+ACpqNgSCSms5DGJRXmiqM6X3Fkkz+iDghnaz9LtsQwH04EpM50tTU9v
-# T3JhWmBTcx21CGEkLe+CAhs9n1BFGy+u1jaBBu9wJcwdrgfk71LW2jajFlOZ4+Qy
-# wtH7x7u18/nnHZO8ZGyecZyWKcFTmYbb1fWwRft/9cCtSSn7zlJlWwIfgadLNKE0
-# P66WlOrcPBUJ5qr4hV3+bCDcMLt/1sYdVyW8vj0Ol/swcDrH
+# eDANBgkqhkiG9w0BAQEFAASCAQDR4Xjunu/1eUdlsamFvuC8ucrWSVbZdzl0QmqY
+# RsEC9T5bpu/dO0s3T2/KAhWuPbPzMIDzJJ7is9/cl/YIHdHjfxIb0HXaWcGBsptc
+# YiBBI1+/dBMDKXqm/GdexIl/u6KkbxImeruFXENiuYzp3XUaVvVifFTr8SyZSxsL
+# V2y1llThE8HdINpR8atzxh+yLLQyvoz3gGw75jWUVWOOOYB1K7VaFfxNfuc2SZVZ
+# j518FazNCuRuDQW3UHwGod/b6IL5ysXgQGZ2GHfOlRFiN/UzwcQBUlXayC3UfAld
+# aBL8whV4dlwtHBbzqzABWDNXctyakfR0ww4oLxYFUpVXw1mx
 # SIG # End signature block
