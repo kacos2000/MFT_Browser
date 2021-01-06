@@ -9,6 +9,6 @@ Based on [$MFT Record Viewer](https://github.com/kacos2000/MFT_Record_Viewer)
 - Clicking on any detail of the record, shows the source of the detail in the Hex view grid.
 - All timestamps are in UTC
 
-Note: Opening large MFT records might take a lot of time *(possibly hour(s))*, as it needs to map each child record to it's parent, and as the structure grows, the time needed to search is grown exponentially. A couple of $MFT files s to play with can be found [here](https://github.com/EricZimmerman/MFT/tree/3bed2626ee85e9a96a6db70a17407d0c3696056a/MFT.Test/TestFiles)
+Note: Opening large MFT records might take a lot of time *(possibly hour(s))*, as it needs to map each child record to it's parent, and as the structure grows, the time needed to search is grown exponentially. A few small test $MFT files to play with can be found [here](https://github.com/EricZimmerman/MFT/tree/3bed2626ee85e9a96a6db70a17407d0c3696056a/MFT.Test/TestFiles) and [here](https://github.com/msuhanov/dfir_ntfs/tree/master/test_data)
 
 ![MFT_Browser](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/MFTbrowser.jpg)
