@@ -9,7 +9,7 @@
 - Clicking on any detail of the record, shows the source of the detail in the Hex view grid.
 - All timestamps are in UTC
 
-Note: Opening large MFT files might take a lot of time *(possibly hour(s))*, as it needs to map each child record to it's parent, and as the structure grows, the time needed to search is grown exponentially:
+Note: Recreating the directory tree from large MFT files might take a lot of time, *(possibly hour(s))*, as it needs to map each child record to it's parent node, and as the structure grows, the time needed grows exponentially. E.g.:
 
    ![](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/m0.JPG)![](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/m2.JPG)![](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/m1.JPG)
 
