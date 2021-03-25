@@ -22,6 +22,16 @@ begin
     uint16      "Structure Size (bytes)" // Number of bytes in this structure, from the beginning to the end, including the Jump data
     hex 2       "Checksum"               // calculated over the bytes starting at the FsName data member and ending at the last byte of this structure, 
                                          // excluding the Jmp and Checksum
+    // not MS Documented:
+    int64       "Sectors in volume"
+    uint32      "Bytes per sector"
+    uint32      "Sectors per cluster"
+    uint8       "File system major version"
+    uint8       "File system minor version"
+    move 14
+    hex 8       "Volume Serial Number"
+    // Source:    https://www.sciencedirect.com/science/article/pii/S1742287619301252
+
 end
 
 // Reference:
