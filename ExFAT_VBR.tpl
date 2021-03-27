@@ -49,7 +49,16 @@ begin
         uint8   "Bytes per Sector (2^x)"     //Range 9-12
         uint8   "Sectors per Cluster (2^x)"  //Range 0-25
         uint8   "Number Of Fats"             //Range 1 or (2: volume contains 1st FAT, 2nd FAT, 1st Allocation Bitmap, and 2nd Allocation Bitmap; only valid for TexFAT volumes)
-	    uint8	"Drive Select (INT 13h drive Nr)"
+	    hex 1	"Drive Select (INT 13h drive Nr)" 
+                                                    //0x00: 1st floppy disk ( "drive A:" )
+                                                    //0x01: 2nd floppy disk ( "drive B:" )
+                                                    //..
+                                                    //0x7F: 128th floppy disk 
+                                                    //0x80:	1st hard disk 
+                                                    //0x81	2nd hard disk 
+                                                    //0x82:	3rd hard disk 
+                                                    //..
+                                                    //0xFF: 128th hard disk
         uint8   "% of clusters in the Cluster Heap In Use"
 	    move 7  //skip 'Reserved' part
 	 endsection
