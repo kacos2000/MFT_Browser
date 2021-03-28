@@ -7,7 +7,7 @@ template "ExFAT - VBR"
 // To be applied to first sector (sector 0) of a Volume, OR
 // to the last sector of a Volume
 
-description "ExFAT - File system recognition information"
+description "ExFAT - Volume Boot Record"
 applies_to disk
 sector-aligned
 read-only
