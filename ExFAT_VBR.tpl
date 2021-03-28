@@ -11,10 +11,9 @@ description "ExFAT - Volume Boot Record"
 applies_to disk
 sector-aligned
 read-only
-requires 0x00  "EB 76 90"
+
 requires 0x03  "45 58 46 41 54 20 20 20" // ExFAT signature, including trailing 0s
 requires 0x1FE "55 AA"
-read-only
 
 begin
 	section "Boot Sector Structure"
