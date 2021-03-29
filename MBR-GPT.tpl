@@ -1,4 +1,4 @@
-template "MBR Partition Table"
+template "MBR & GPT Partition Table"
 
 // Based on Template by Stefan Fleischmann
 // X-Ways Software Technology AG
@@ -14,7 +14,7 @@ template "MBR Partition Table"
 // Checks for GPT Partition, and if found, 
 // reads the GPT Partition entries too
 
-description "MBR Partition Table"
+description "MBR & GPT Partition Table"
 applies_to disk
 sector-aligned
 requires 510 "55 AA"
