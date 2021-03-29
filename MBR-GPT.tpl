@@ -42,7 +42,7 @@ begin
 	    hex 1	  "Partition type indicator (hex)"
         ifEqual   "Partition type indicator (hex)" 0xEE
             move -1
-            hex 1 " =>Protective MBR (GPT part. follows)" //Protective MBR area exists on a GPT partition layout for backward compatibility
+            hex 1 " => Protective MBR (GPT part. follows)" //Protective MBR area exists on a GPT partition layout for backward compatibility
             else
             // ref: https://docs.microsoft.com/en-us/windows/win32/fileio/basic-and-dynamic-disks
             
