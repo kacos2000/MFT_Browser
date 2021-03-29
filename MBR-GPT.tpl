@@ -5,7 +5,7 @@ template "MBR Partition Table"
 //
 // modified by
 //
-// Costas Katsavounidis - 2021 v.1
+// Costas Katsavounidis - 2021 v.1a
 // kacos2000 [at] gmail.com
 // https://github.com/kacos2000
 
@@ -153,7 +153,7 @@ begin
 
 	move 420
     // GPT Partitions list
-        numbering 1
+       numbering 1
 	        {
 	        section	"GPT - Partition Entry #~"
 	        
@@ -190,20 +190,19 @@ begin
 		        int64		"Ending LBA"
 		        hex 8 		"Attribute Bits (hex)"
                 move -8
-                    uint_flex "0" "- [0x01]: PLATFORM_REQUIRED" //0x0000000000000001
+                    uint_flex "0" "- [0x01]: Platform Required" //0x0000000000000001
                     move 3
-                    uint_flex "7" "- [0x80]: NO_DRIVE_LETTER"   //0x8000000000000000
+                    uint_flex "7" "- [0x80]: No Drive Letter"   //0x8000000000000000
                     move -4
-                    uint_flex "6" "- [0x40]: HIDDEN"            //0x4000000000000000
+                    uint_flex "6" "- [0x40]: Hidden"            //0x4000000000000000
                     move -4
-                    uint_flex "5" "- [0x20]: SHADOW_COPY"       //0x2000000000000000
+                    uint_flex "5" "- [0x20]: Shadow Copy"       //0x2000000000000000
                     move -4
-                    uint_flex "4" "- [0x10]: READ_ONLY"         //0x1000000000000000
+                    uint_flex "4" "- [0x10]: Read Only"         //0x1000000000000000
                 move -3
                 //  https://docs.microsoft.com/en-us/windows/win32/api/winioctl/ns-winioctl-partition_information_gpt
 		        string16 36	"Partition #~ Name"
+              endsection
 	        }[128]
-
-	endsection
     endIF
 end
