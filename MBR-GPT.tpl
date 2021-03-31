@@ -5,7 +5,7 @@ template "MBR & GPT Partition Table"
 //
 // modified by
 //
-// Costas Katsavounidis - 2021 v.1a
+// Costas Katsavounidis - 2021 v.2
 // kacos2000 [at] gmail.com
 // https://github.com/kacos2000
 
@@ -13,6 +13,7 @@ template "MBR & GPT Partition Table"
 
 // Checks for GPT Partition, and if found, 
 // reads the GPT Partition entries too
+// Updated to work with both 512 & 4096 byte sector
 
 description "MBR & GPT Partition Table"
 applies_to disk
@@ -21,7 +22,10 @@ requires 510 "55 AA"
 read-only
 
 begin
-	goto 440 
+	goto 239
+    char[4] "Hardware Supports TPM (=TCPA)" //TCPA = "Trusted Computing Platform Alliance" => tests for the existence of a TPM chip 
+    // https://thestarman.pcministry.com/asm/mbr/W7MBR.htm#INTRO
+    goto 440 
     section "MBR - Disk Signature"
 	    hex 4 "Disk Signature (hex)"
 	    move -4
@@ -35,7 +39,7 @@ begin
 	section	"MBR - Partition Entry #~"
 	    hex 1     "Boot Indicator (0x80=Bootable)" //If TRUE (0x80), the partition is active and can be booted
 	    uint8     "Start head"
-	    uint_flex "5,4,3,2,1,0" "Start sector"
+	    uint_flex "5,4,3,2,1,0" "Start sector" // sectors start counting at 1
 	    move -4
 	    uint_flex "7,6,15,14,13,12,11,10,9,8" "Start cylinder"
 	    move -2
@@ -68,7 +72,7 @@ begin
             else
             ifEqual "Partition type indicator (hex)" 0x07
                 move -1
-                hex 1 " => IFS partition"
+                hex 1 " => IFS partition" //NTFS
             else
             ifEqual "Partition type indicator (hex)" 0x42
                 move -1
@@ -107,7 +111,7 @@ begin
                 //*Full list: https://www.win.tue.nl/~aeb/partitions/partition_types-1.html
         EndIf
         uint8     "End head"
-	    uint_flex "5,4,3,2,1,0" "End sector"
+	    uint_flex "5,4,3,2,1,0" "End sector" // Max value = 63
 	    move -4
 	    uint_flex "7,6,15,14,13,12,11,10,9,8" "End cylinder"
 	    move -2
@@ -119,13 +123,24 @@ begin
 
 	hex 2 "MBR Boot Signature" //describes whether the intent of a given sector is for it to be a Boot Sector (=AA55h) or not
     // End of Master Boot Record (MBR)
-    
-    Section "GUID Partition Table (GPT) - Signature"
+    // **********************************************************
+   Section "GPT - Signature (512 byte sector)"
     // Check if there is a GUID (GPT) Partition Table
-        char[8] "GPT Signature present"
+        char[8] "GPT Signature at 0x200"
+        ifEqual "GPT Signature at 0x200" "EFI PART"
+        move 0
     endSection
-
-    ifEqual "GPT Signature present" "EFI PART"
+    else
+        goto 4096
+        Section "GPT - Signature (4096 byte sector)"
+        // Check if there is a GUID (GPT) Partition Table at 0x1000
+        char[8] "GPT Signature at 0x1000"
+        ifEqual "GPT Signature at 0x1000" "EFI PART"
+        move 0
+    endSection
+    else
+        end
+    endif
 
     section	"GPT - Header"
 		hex 4	"Revision (hex)"
@@ -144,14 +159,20 @@ begin
 		hex 16 		"Disk GUID (hex)"
 		move -16
 		GUID		"Disk GUID"
-		int64		"Partition Entry LBA" // Always 2 in the Primary GPT
+		int64		"Partition_Entry_LBA" // Always 2 in the Primary GPT
 		uint32		"(Max) Nr of Partition Entries"
 		uint32		"Size of Partition Entries (bytes)"
 		hexadecimal uint32	"Partition Entry Array CRC32"
 	endsection
     // https://www.ntfs.com/guid-part-table.htm
+    
+    ifEqual "GPT Signature at 0x200" "EFI PART"
+	    goto  ((Partition_Entry_LBA)*512)
+    else
+    ifEqual "GPT Signature at 0x1000" "EFI PART"
+        goto  ((Partition_Entry_LBA)*4096)
+    endIf
 
-	move 420
     // GPT Partitions list
        numbering 1
 	        {
@@ -188,6 +209,8 @@ begin
 			        ExitLoop
 		        EndIf
 		        int64		"Ending LBA"
+                // Note: Partition size = 
+                // ((Ending LBA - Starting LBA)+1)*(sector size)
 		        hex 8 		"Attribute Bits (hex)"
                 move -8
                     uint_flex "0" "- [0x01]: Platform Required" //0x0000000000000001
@@ -204,5 +227,4 @@ begin
 		        string16 36	"Partition #~ Name"
               endsection
 	        }[128]
-    endIF
 end
