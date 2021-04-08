@@ -15,6 +15,8 @@ Note: Recreating the directory tree from large MFT files might take a lot of tim
 
 A few small test $MFT files to play with can be found [here](https://github.com/EricZimmerman/MFT/tree/3bed2626ee85e9a96a6db70a17407d0c3696056a/MFT.Test/TestFiles) and [here](https://github.com/msuhanov/dfir_ntfs/tree/master/test_data)
 
-*Based on [$MFT Record Viewer](https://github.com/kacos2000/MFT_Record_Viewer)*
+*Based on [$MFT Record Viewer](https://github.com/kacos2000/MFT_Record_Viewer)*<br>
+
+Note: *WinHex/XWF templates were move [here](https://github.com/kacos2000/WinHex_Templates)*<br>
 
 
