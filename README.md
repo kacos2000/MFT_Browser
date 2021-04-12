@@ -17,6 +17,6 @@ A few small test $MFT files to play with can be found [here](https://github.com/
 
 *Based on [$MFT Record Viewer](https://github.com/kacos2000/MFT_Record_Viewer)*<br>
 
-Note: *WinHex/XWF templates were move [here](https://github.com/kacos2000/WinHex_Templates)*<br>
+Note: *WinHex/XWF templates were moved [here](https://github.com/kacos2000/WinHex_Templates)*<br>
 
 
