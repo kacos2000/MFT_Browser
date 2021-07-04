@@ -12,6 +12,8 @@
 Note: Recreating the directory tree from large MFT files might take a lot of time, *(possibly hour(s))*, as it needs to map each child record to it's parent node, and as the structure grows, the time needed grows exponentially. E.g.:
 
    ![](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/m0.JPG)![](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/m2.JPG)![](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/m1.JPG)
+   
+[How to view a single record from a large MFT file](https://github.com/kacos2000/MFT_Browser/blob/master/How%20to%20view%20a%20single%20record%20from%20a%20large%20MFT%20file.pdf)
 
 A few small test $MFT files to play with can be found [here](https://github.com/EricZimmerman/MFT/tree/3bed2626ee85e9a96a6db70a17407d0c3696056a/MFT.Test/TestFiles) and [here](https://github.com/msuhanov/dfir_ntfs/tree/master/test_data)
 
