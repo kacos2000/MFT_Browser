@@ -2,7 +2,8 @@
 
 # [MFT_Browser](https://github.com/kacos2000/MFT_Browser/releases/latest)
 
-![MFT_Browser](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/MFTbrowser.jpg)
+<!-- ![MFT_Browser](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/MFTbrowser.jpg) -->
+![MFTbrowser animation](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/b38GPgFsUh.gif)
 
 - Recreates the File/Directory tree structure based on an offline *(extracted)* $MFT file.
 - 'Node Properties' right click option or Double clicking on any file/directory entry gets the full MFT details for that record
