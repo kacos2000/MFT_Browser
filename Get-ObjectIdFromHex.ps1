@@ -37,7 +37,7 @@ function Get-ObjectIdFromHex
 	{
 		# remove 0x and extra spaces
 		$Hex = $Hex -replace " ", ""
-		$Hex = $Hex.trim().Trimstart("0x").TrimStart("0X") -replace '\s', ''
+		$Hex = $Hex.trim() -replace '\s', ''
 		
 		# check length
 		if ($hex.length -ne 32) { return }
