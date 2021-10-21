@@ -11,7 +11,7 @@
 - All timestamps are in UTC
 
 ### Note:
-You'll need a previously extracted $MFT or $MFTMirr file by another tool *(eg. [FTK Imager](https://accessdata.com/product-download)  or [Export-MFT.ps1](https://gist.github.com/secabstraction/4044f4aadd3ef21f0ca9))*
+You'll need a previously extracted $MFT or $MFTMirr file by another tool *(eg. [FTK Imager](https://accessdata.com/product-download))*
 
 Recreating the directory tree from large MFT files might take a lot of time, *(possibly hour(s))*, as it needs to map each child record to it's parent node, and as the structure grows, the time needed grows exponentially.
 
