@@ -10,6 +10,8 @@
 - Clicking on any detail of the record, shows the source of the detail in the Hex view grid.
 - All timestamps are in UTC
 
+==> **[Latest Version](https://github.com/kacos2000/MFT_Browser/releases/latest)** <==
+
 ### Note:
 You'll need a previously extracted $MFT or $MFTMirr file by another tool *(eg. [FTK Imager](https://accessdata.com/product-download))*
 
