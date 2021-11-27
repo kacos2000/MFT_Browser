@@ -6,13 +6,16 @@
 ![MFTbrowser animation](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/b38GPgFsUh.gif)
 
 - Recreates the File/Directory tree structure from an *(extracted)* $MFT file.
-- Able to carve & recreate the Directory tree from a Raw Image *(v.60+)*
+- Able to carve FILE records & recreate a Directory tree from a Raw Image *(v.60+)*
 - Able to extract the $MFT & recreate the Directory tree from a mounted drive NTFS volume *(Volume must have a drive letter)* *(v.60+)*
+-----------------
+
+==> **[Latest Version](https://github.com/kacos2000/MFT_Browser/releases/latest)** <==
+
+-----------------
 - 'Node Properties' right click option or Double clicking on any file/directory entry gets the full MFT details for that record
 - Clicking on any detail of the record, shows the source of the detail in the Hex view grid.
 - All timestamps are in UTC
-
-==> **[Latest Version](https://github.com/kacos2000/MFT_Browser/releases/latest)** <==
 
 ### Note:
 Recreating the directory tree from large MFT files might take a lot of time, *(possibly hour(s))*, as it needs to map each child record to it's parent node, and as the structure grows, the time needed grows exponentially.
