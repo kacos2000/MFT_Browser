@@ -13,6 +13,10 @@
 
 ==> **[Latest Version](https://github.com/kacos2000/MFT_Browser/releases/latest)** <==
 
+[Dependencies] 
+- [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
+- [Powershell Version:  5.1](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/windows-powershell-system-requirements?view=powershell-5.1)
+
 -----------------
 - 'Node Properties' right click option or Double clicking on any file/directory entry gets the full MFT details for that record
 - Clicking on any detail of the record, shows the source of the detail in the Hex view grid.
