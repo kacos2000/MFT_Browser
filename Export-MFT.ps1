@@ -89,7 +89,9 @@ PS C:\> Export-MFT -ComputerName Server01 -Volume F
             }
         }
 
-        $OutputFilePath = $env:TEMP + "\$([IO.Path]::GetRandomFileName())"
+        $tnow = (Get-Date).ToFileTimeUtc()
+		$OutputFilePath = $env:TEMP + "\`$MFT_$($Volume)_$($Win32_Volume.SerialNumber.ToString('X'))_$($tnow)"
+        ## Old -> $OutputFilePath = $env:TEMP + "\$([IO.Path]::GetRandomFileName())"
 
         #region WinAPI
 
@@ -200,6 +202,9 @@ PS C:\> Export-MFT -ComputerName Server01 -Volume F
         $TotalBytesWritten = 0
         $MftData = New-Object byte[](0x1000)
         $OutputFileStream = [IO.File]::OpenWrite($OutputFilePath)
+        # MD5 Hash	
+		$md5new = [System.Security.Cryptography.MD5]::Create()
+        $sha256new = [System.Security.Cryptography.SHA256]::Create()
 
         do {
             $StartBytes = [int]"0x$($Runlist.Substring($DataRunStringsOffset + 0, 1))"
@@ -225,6 +230,10 @@ PS C:\> Export-MFT -ComputerName Server01 -Volume F
                     Write-Warning "Possible error reading MFT data on $env:COMPUTERNAME." 
                 }
                 $OutputFileStream.Write($MftData, 0, $MftData.Length)
+                # compute hashes (partial)
+			    $null = $md5new.TransformBlock($MftData, 0, $MftData.Length, $null, 0)
+                $null = $sha256new.TransformBlock($MftData, 0, $MftData.Length, $null, 0)
+                # Get total bytes
                 $TotalBytesWritten += $MftData.Length
             }
             $DataRunStringsOffset += ($StartBytes + $LengthBytes + 1) * 2
@@ -233,12 +242,20 @@ PS C:\> Export-MFT -ComputerName Server01 -Volume F
         $FileStream.Dispose()
         $OutputFileStream.Dispose()
 
+        # Get Final (Full) Hash
+		$md5new.TransformFinalBlock([byte[]]::new(0), 0, 0)
+        $sha256new.TransformFinalBlock([byte[]]::new(0), 0, 0)
+		$md5 = [System.BitConverter]::ToString($md5new.Hash).Replace("-", "")
+        $sha256 = [System.BitConverter]::ToString($sha256new.Hash).Replace("-", "")
+
         $Properties = @{
             NetworkPath = "\\$($env:COMPUTERNAME)\C$\$($OutputFilePath.TrimStart('C:\'))"
             ComputerName = $env:COMPUTERNAME
             'MFT Size' = "$($MftSize / 1024 / 1024) MB"
             'MFT Volume' = $Volume
             'MFT File' = $OutputFilePath
+            'MFT File MD5 Hash' = $md5
+            'MFT File SHA256 Hash' = $sha256
         }
         New-Object -TypeName PSObject -Property $Properties
     }
