@@ -7,7 +7,7 @@
 		Version: 0.3
 		Author : Costas Katsavounidis (@kacos2000)
 		Fixed bug with negative dataruns
-		Changed extracted Filename to more human frienly one (inc. Volume Serial & extracted timestamp in FileTimeUtc)
+		Changed extracted Filename to more human friendly one (inc. Volume Serial & extracted timestamp in FileTimeUtc)
 		Added Support for both 1K & 4K records
 		Added extra info on extracted MFT (inc. MD5/SHA256 hashes)
 		Updated output -> parameter CSV is now a switch (true/false)
@@ -108,8 +108,8 @@ param
 		{
 			$Win32_Volume = Get-CimInstance -ClassName CIM_StorageVolume | where DriveLetter -match $Volume
 			#$Win32_Volume = Get-WmiObject -Class Win32_Volume -Filter "DriveLetter LIKE '$($Volume):'"
-            if ($Win32_Volume.FileSystem -ne "NTFS") { 
-                Write-Error "$Volume is not an NTFS filesystem."
+            if ($Win32_Volume.FileSystem -ne "NTFS") {
+			Write-Error "$($Volume) does not have an NTFS filesystem."
                 break
             }
         }
@@ -118,7 +118,7 @@ param
 			#$Win32_Volume = Get-WmiObject -Class Win32_Volume -Filter "DriveLetter LIKE '$($env:SystemDrive)'"
 			if ($Win32_Volume.FileSystem -ne "NTFS")
 				{ 
-	                Write-Error "$env:SystemDrive is not an NTFS filesystem."
+	                Write-Error "$($env:SystemDrive) does not have an NTFS filesystem."
 	                break
 				}
 				else
@@ -195,7 +195,7 @@ param
         }
         
         if ($VolumeHandle -eq -1) { 
-            Write-Error -Message "Unable to obtain read handle for volume."
+            Write-Error -Message "Unable to obtain read handle for volume $($Volume)"
             break 
         }         
         
@@ -204,7 +204,7 @@ param
 
         # Read VBR from volume
         $VolumeBootRecord = New-Object Byte[](512)                                                     
-        if ($FileStream.Read($VolumeBootRecord, 0, $VolumeBootRecord.Length) -ne 512) { Write-Error "Error reading volume boot record." }
+        if ($FileStream.Read($VolumeBootRecord, 0, $VolumeBootRecord.Length) -ne 512) { Write-Error "Error reading volume $($Volume)'s boot record." }
 
         # Get bytes per cluster
 		$bytespersector = [Bitconverter]::ToUInt16($VolumeBootRecord[0xB .. 0xC], 0)
@@ -224,7 +224,7 @@ param
 		$MftFileRecordHeader = New-Object byte[](48)
 		if ($FileStream.Read($MftFileRecordHeader, 0, $MftFileRecordHeader.Length) -ne $MftFileRecordHeader.Length)
 		{
-			Write-Error -Exception "Error reading `$MFT file record header."
+			Write-Error -Exception "Error reading the `$MFT file record header."
 			return
 		}
 		elseif([System.Text.Encoding]::ASCII.GetString($MftFileRecordHeader[0..3]) -ne 'FILE')
@@ -251,7 +251,7 @@ param
 		$FileStream.Position = $MftOffset
 		if ($FileStream.Read($MftFileRecord, 0, $MftFileRecord.Length) -ne $RecordSize)
 		{
-			Write-Error -Message "Error reading `$MFT file record.`n$($Error[0].InvocationInfo.PositionMessage | Out-String)"
+			Write-Error -Message "Error reading `$MFT file record."
 			return
 		}
 		
@@ -409,8 +409,8 @@ param
 # SIG # Begin signature block
 # MIIviAYJKoZIhvcNAQcCoIIveTCCL3UCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAgVUJMWry6i9yq
-# rBO135PPdxLTHnHPgIh/Lk2joMK1KqCCKI0wggQyMIIDGqADAgECAgEBMA0GCSqG
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBOqZtwhAmDlPkj
+# dYMRX1XKTRx/BFUMWctE4FKDRgy/TaCCKI0wggQyMIIDGqADAgECAgEBMA0GCSqG
 # SIb3DQEBBQUAMHsxCzAJBgNVBAYTAkdCMRswGQYDVQQIDBJHcmVhdGVyIE1hbmNo
 # ZXN0ZXIxEDAOBgNVBAcMB1NhbGZvcmQxGjAYBgNVBAoMEUNvbW9kbyBDQSBMaW1p
 # dGVkMSEwHwYDVQQDDBhBQUEgQ2VydGlmaWNhdGUgU2VydmljZXMwHhcNMDQwMTAx
@@ -630,35 +630,35 @@ param
 # AQEwaDBUMQswCQYDVQQGEwJHQjEYMBYGA1UEChMPU2VjdGlnbyBMaW1pdGVkMSsw
 # KQYDVQQDEyJTZWN0aWdvIFB1YmxpYyBDb2RlIFNpZ25pbmcgQ0EgUjM2AhALYufv
 # MdbwtA/sWXrOPd+kMA0GCWCGSAFlAwQCAQUAoEwwGQYJKoZIhvcNAQkDMQwGCisG
-# AQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEIJNQchJPV3vbTemva0/V5DkoH/2ZPANZ
-# yXZdXnGgyVfnMA0GCSqGSIb3DQEBAQUABIICAIVIbhDoGrBItrEjFAgP+gO5BdCC
-# rrJonNJM2dy2dRUm8MOGgreZ7GdBdskM7eBn4eFfCJHmK0VBbiurDPeQ1dryRdni
-# ADf7CLAjcus7vO61wszSuE/0NLD7kRcPQJkq3hRUyilMlNr46bJDIkXKGnemVJh0
-# prySAnocnjSrl0suToQVWRIKHd/WhxdCEQSQcwLyMrowAbGxbPhJfL+APotAIBYw
-# vU8OQkqpvHPI04loiOETfA3tucOe55HN3RpgLOanVkI4ShgPsmrk+h5jPx0R/slq
-# U3cQ1oW8M53o2Kmk4TWmG306e1upRdB2Daj3KSkaJXkL81KbMvz4wMIyDj32ZQHq
-# 9XX4KVTYXHzGCsJetBpqPffEfMcvWpYGr0q3uVYCytmZ+XETawpeV4bSK9gWcFj8
-# GZJqAqVM6rTpBwkDtcqSoNW26HlU3XaGXStRgYvLduUtT4SX5d86HC0Ro18mbesG
-# YltcONFubdFNX9USQCSIwjsN9pEgWtIceDmSd6hZId/dJrzI7ahe+fdybaEo9ux5
-# OGEFCHXj7Jw8zgBI5+Fvuqli399XcYo4rpqlFLfutaAJJ62X2T3xx2TCEA8KgmlN
-# id9bzfcb4XaQ/JUJWAWWiGFiz3b+ACT0/p4en73AYpAvV41uuQ5ELmhkXZaepGxL
-# NJr5GZO5PIUXNZUSoYIDbDCCA2gGCSqGSIb3DQEJBjGCA1kwggNVAgEBMG8wWzEL
+# AQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEINe+azb6qMbiyHxqWSIDfqwrCO9cZ/f4
+# nvU4YYIfTD/sMA0GCSqGSIb3DQEBAQUABIICAAztJCzL52YGjnT7mdoyXR+z7TFk
+# dC1U9i3EXhJFdy834lr4tZ9G4WOKMWCsM4jkbCqXx7XzGmqcBH+5z1jKaN07YLfo
+# JjZZ10aJey5h7DrrfxPRuFue/8dHB3/EUwkOkLJcf2BS2EvIl7NPW1G53j63Ja0C
+# qLqBi9kNQEqvZKEB6RPDkRx8jFUG+SZZNilZg1kTs8sm8IP4XILwFCT6JX27KU/i
+# z3woUvrcmHatl4qyxTepVQ3RY+vvtRz40tKKjuy1QORfKQyCbBCyRUHyDVb8LgsD
+# /kEq7J1oX4GNh4Hemukxt47D2ZPDNTgQje2dz2utPLOyoJ8mf95rDNf7h6jUtszT
+# DXgS/cPi6lTFnOMvmhCSCpd6gMlUqC7RgrPSH+eM2xF07IB/RcDptjS4qtpf5ggX
+# XJZO2bBZ62Z8t470eb6H5EKY/auUAHb8UZdXkBPaVQBTcwfax8KduPTFNsl/zzsO
+# icw2Anh8xdoT213prbfuS300iYy1fzywH6yVvYBLOULwkayNJp3YthxticyiodMm
+# vjAyY0BMp2MEqJkKtf8vU83CMqpj55M5x7smcuzlaXwBejzWLZDslTmZYTypgyf4
+# RmU8b6V8tWofEp2qV945rlZhFU85+IBomkDS3SpHlkWxnJpcPUammOG+IKZUeOxo
+# 68xv5nzbNxxM1F2ToYIDbDCCA2gGCSqGSIb3DQEJBjGCA1kwggNVAgEBMG8wWzEL
 # MAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExMTAvBgNVBAMT
 # KEdsb2JhbFNpZ24gVGltZXN0YW1waW5nIENBIC0gU0hBMzg0IC0gRzQCEAFIkD3C
 # irynoRlNDBxXuCkwCwYJYIZIAWUDBAIBoIIBPTAYBgkqhkiG9w0BCQMxCwYJKoZI
-# hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjExMDQyMTEwNThaMCsGCSqGSIb3DQEJ
+# hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjExMDQyMTMwMTNaMCsGCSqGSIb3DQEJ
 # NDEeMBwwCwYJYIZIAWUDBAIBoQ0GCSqGSIb3DQEBCwUAMC8GCSqGSIb3DQEJBDEi
-# BCD4ptFZr84LO31ek0+EbI7etVtv+TnLceVGAfZvH1nSXjCBpAYLKoZIhvcNAQkQ
+# BCCTrytPGS3spI7CW7QILvRl7AVtZACXvfljs3MC058sZDCBpAYLKoZIhvcNAQkQ
 # AgwxgZQwgZEwgY4wgYsEFDEDDhdqpFkuqyyLregymfy1WF3PMHMwX6RdMFsxCzAJ
 # BgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
 # bG9iYWxTaWduIFRpbWVzdGFtcGluZyBDQSAtIFNIQTM4NCAtIEc0AhABSJA9woq8
-# p6EZTQwcV7gpMA0GCSqGSIb3DQEBCwUABIIBgLybUirOmcFlfNUAwGtQu5a2rY9i
-# c/kxIvMAOwzqK7N5/tYaGFcQuEiLeM79uESCP68HcsmE9jyMJncUO5hT+n15WMia
-# taHMtZ4XzfN5dXskVmFGVcnoX1wQqBwt9DJ/rewQp8XK5q/sMGfq49QCA553+FCD
-# vv3Ga23411ARlM99nD7e8Oh4cxiyM9HLS2F1VhAA2FwDg78cNVGbwp0Jry4qHeCn
-# 5z/gDnEVh95pPBD2jWfNQMybftqBbCvXFlHF0ylYTH+bgVefHCFR33NRAoHjnunc
-# g5K9RgBB2uTLO5c64OkQeG418AT6nZxI0UbdRjUPlJ4Urc3d4jBSxcm0Tv7cbr6X
-# j8rBRWd7xw593MKYlreBR3VHs8EtaX6+biJlRtPUqrGmX3QczWROmY7xSSysue8W
-# amKFaKrEzAU+UWd8ksQgpdlwk5fccSFyFtc47cqxaYsaBtZPQmIKLBoeK1sYtxcZ
-# Z5XwLQc9/NOAJTStc33vv8rJdL4udA1WD7bkiQ==
+# p6EZTQwcV7gpMA0GCSqGSIb3DQEBCwUABIIBgKTwwzMT5iooe1oRiUkTnlbo7Qth
+# JCulawPeyzDmcgWCPjej2g4MldJIbVpKQWUYO6w6chyY/ZqP0eQeBxAk3WSsFSIy
+# Jc0swC7b3Bz+5caVZpTNlTFnRkkJVcIvS1ooZLlwEe4Giyql2+/65+PQRQviZTBC
+# xrQyDSEtrrgcp34WFvjVswtDy4pn4P7TrPpU8NkvLF0x+LdZzwTfnd6WLgsyEGFK
+# oUWhzB2x8mLXyfCSLGIdlki0P2zsGCJ6EBM6pOtjennitClPsiJEKgwOtDhLUsuM
+# isQtM00XEacn0fO8wB7WXOOIQ72khT7aDk4zIGWnoyWMluCaTaL3iszlocRg8z0W
+# JuALgmVxtDCFAQ7m3P/xq0QG+fof1tOxnTXiM7t/DWTctVGFu+FT7KHie4ZAZtW6
+# ITnndYxlawVMbZFjdG/7VrzYvYEgVw4vJh0aXyFFXoNJ3hUNE/JB3d55hFjZvAVo
+# vozw8GaSiFdVqyzkJz7V/155l5Eu55CjwH7k2A==
 # SIG # End signature block
