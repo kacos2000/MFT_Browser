@@ -212,7 +212,7 @@ param
 		$bytespercluster = $bytespersector * $sectorspercluster
 
         # Parse MFT offset from VBR and set stream to its location
-        $MftOffset = [Bitconverter]::ToInt32($VolumeBootRecord[0x30..0x37], 0) * 0x1000
+        $MftOffset = [Bitconverter]::ToInt32($VolumeBootRecord[0x30..0x37], 0) * $bytespercluster
         $FileStream.Position = $MftOffset
 
         # Get Volume Serial Number
@@ -281,7 +281,7 @@ param
 	# Parse data attribute from all attributes
         $DataAttribute = $Attributes[$($CurrentOffset - $AttributeSize)..$($CurrentOffset - 1)]
 
-        # Parse MFT logical size from data attribute
+        # Parse the MFT logical size from data attribute
         $MftSize = [Bitconverter]::ToUInt64($DataAttribute[0x30..0x37], 0)
         
         # Parse data runs from data attribute
@@ -327,8 +327,12 @@ param
 			[array]::reverse($lengthh)
 			$lengthh = (-join $lengthh).trim() -replace " ", ""
 			$DataRunLength = [bigint]::Parse($lengthh, 'AllowHexSpecifier')
-			
-			$MftData = New-Object System.Byte[]($bytespercluster * $DataRunLength)
+			# Get the Logical Size & not the Physical (Allocated)
+			$MftData = if (($TotalBytesWritten + $bytespercluster * $DataRunLength) -gt $MftSize)
+			{
+				New-Object System.Byte[]($MftSize - $TotalBytesWritten)
+			}
+			else { New-Object System.Byte[]($bytespercluster * $DataRunLength) }
 			$FileStreamOffset += ($DataRunStart * $bytespercluster)
 			$FileStream.Position = $FileStreamOffset
 			
@@ -409,8 +413,8 @@ param
 # SIG # Begin signature block
 # MIIviAYJKoZIhvcNAQcCoIIveTCCL3UCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBOqZtwhAmDlPkj
-# dYMRX1XKTRx/BFUMWctE4FKDRgy/TaCCKI0wggQyMIIDGqADAgECAgEBMA0GCSqG
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCV611KKIS0qwlm
+# KbRu06h933xEy+9JcZRaZkujcmLsrqCCKI0wggQyMIIDGqADAgECAgEBMA0GCSqG
 # SIb3DQEBBQUAMHsxCzAJBgNVBAYTAkdCMRswGQYDVQQIDBJHcmVhdGVyIE1hbmNo
 # ZXN0ZXIxEDAOBgNVBAcMB1NhbGZvcmQxGjAYBgNVBAoMEUNvbW9kbyBDQSBMaW1p
 # dGVkMSEwHwYDVQQDDBhBQUEgQ2VydGlmaWNhdGUgU2VydmljZXMwHhcNMDQwMTAx
@@ -630,35 +634,35 @@ param
 # AQEwaDBUMQswCQYDVQQGEwJHQjEYMBYGA1UEChMPU2VjdGlnbyBMaW1pdGVkMSsw
 # KQYDVQQDEyJTZWN0aWdvIFB1YmxpYyBDb2RlIFNpZ25pbmcgQ0EgUjM2AhALYufv
 # MdbwtA/sWXrOPd+kMA0GCWCGSAFlAwQCAQUAoEwwGQYJKoZIhvcNAQkDMQwGCisG
-# AQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEINe+azb6qMbiyHxqWSIDfqwrCO9cZ/f4
-# nvU4YYIfTD/sMA0GCSqGSIb3DQEBAQUABIICAAztJCzL52YGjnT7mdoyXR+z7TFk
-# dC1U9i3EXhJFdy834lr4tZ9G4WOKMWCsM4jkbCqXx7XzGmqcBH+5z1jKaN07YLfo
-# JjZZ10aJey5h7DrrfxPRuFue/8dHB3/EUwkOkLJcf2BS2EvIl7NPW1G53j63Ja0C
-# qLqBi9kNQEqvZKEB6RPDkRx8jFUG+SZZNilZg1kTs8sm8IP4XILwFCT6JX27KU/i
-# z3woUvrcmHatl4qyxTepVQ3RY+vvtRz40tKKjuy1QORfKQyCbBCyRUHyDVb8LgsD
-# /kEq7J1oX4GNh4Hemukxt47D2ZPDNTgQje2dz2utPLOyoJ8mf95rDNf7h6jUtszT
-# DXgS/cPi6lTFnOMvmhCSCpd6gMlUqC7RgrPSH+eM2xF07IB/RcDptjS4qtpf5ggX
-# XJZO2bBZ62Z8t470eb6H5EKY/auUAHb8UZdXkBPaVQBTcwfax8KduPTFNsl/zzsO
-# icw2Anh8xdoT213prbfuS300iYy1fzywH6yVvYBLOULwkayNJp3YthxticyiodMm
-# vjAyY0BMp2MEqJkKtf8vU83CMqpj55M5x7smcuzlaXwBejzWLZDslTmZYTypgyf4
-# RmU8b6V8tWofEp2qV945rlZhFU85+IBomkDS3SpHlkWxnJpcPUammOG+IKZUeOxo
-# 68xv5nzbNxxM1F2ToYIDbDCCA2gGCSqGSIb3DQEJBjGCA1kwggNVAgEBMG8wWzEL
+# AQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEIDEIUIOOf7v3suOd/UXDscQyk2oHs+9w
+# yzkO91IB0jEqMA0GCSqGSIb3DQEBAQUABIICABuquBXrVCoW3J7RFTajWBSFf2UH
+# 1hXW4KpNpaTfIm95ASbttoLONR93yS/fZnH9UB3iXO2b/aIVQLJ+khEkfUniFjsW
+# MRQ4P791hv0Dr5XdViruqzn6gQuaFutFW6bOAr7QMdRhwbg0PPDffTfAt//vkJp7
+# GEzT8NvSt4nL+CA33y65GhTd6/lCJy50/jOBE6LIKAiM++sM955iZRiAAWi36DrD
+# 7xCAvUmBUQkM2dfujz8fIATD6FMEdCmzugjxJjMu8R0tB1FZN+cZMez0kAx1imru
+# jELsJMfkTQSW/VomWYKU7Smt1nXzkKBnAC6m5lRVtDZUXfnHj9loQu/d6ff/SglM
+# gLwIb1oLgQWAf31rETyYetlbNtcyotXiHN2o1vcOxMecsJbX3RuEeQftoI/dnXkA
+# w7xyoGHwO3vjkNyTK+9ZNFH2FCeE3sCbDFkTZH/GQt3VmHgRuNDCvQg3ItDfKyg/
+# dAOFhDAFRLitv20hkYzz4fiXOrzMI83g7+igeWEvT0lPx5P4X55QHWDFvcqn4K1l
+# WrH1GhNwocAAPsSruZZ55aqb+UYdB0FKwWTArIe3rZCXV37XbEZMS4nkyL7jsQth
+# ZR38zQPC2JxRH0aP8KZIVVgM4z5HvVsf7kwhpcZM8rpKTvSgPvSj9fJJ+fVJSonL
+# 151nE9zB9/oBOx7yoYIDbDCCA2gGCSqGSIb3DQEJBjGCA1kwggNVAgEBMG8wWzEL
 # MAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExMTAvBgNVBAMT
 # KEdsb2JhbFNpZ24gVGltZXN0YW1waW5nIENBIC0gU0hBMzg0IC0gRzQCEAFIkD3C
 # irynoRlNDBxXuCkwCwYJYIZIAWUDBAIBoIIBPTAYBgkqhkiG9w0BCQMxCwYJKoZI
-# hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjExMDQyMTMwMTNaMCsGCSqGSIb3DQEJ
+# hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjExMDcxMTExMzNaMCsGCSqGSIb3DQEJ
 # NDEeMBwwCwYJYIZIAWUDBAIBoQ0GCSqGSIb3DQEBCwUAMC8GCSqGSIb3DQEJBDEi
-# BCCTrytPGS3spI7CW7QILvRl7AVtZACXvfljs3MC058sZDCBpAYLKoZIhvcNAQkQ
+# BCDyafRSA/wlEvOnY2h0dkrPl15S3nEUDgOXq4kX3IQjkzCBpAYLKoZIhvcNAQkQ
 # AgwxgZQwgZEwgY4wgYsEFDEDDhdqpFkuqyyLregymfy1WF3PMHMwX6RdMFsxCzAJ
 # BgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
 # bG9iYWxTaWduIFRpbWVzdGFtcGluZyBDQSAtIFNIQTM4NCAtIEc0AhABSJA9woq8
-# p6EZTQwcV7gpMA0GCSqGSIb3DQEBCwUABIIBgKTwwzMT5iooe1oRiUkTnlbo7Qth
-# JCulawPeyzDmcgWCPjej2g4MldJIbVpKQWUYO6w6chyY/ZqP0eQeBxAk3WSsFSIy
-# Jc0swC7b3Bz+5caVZpTNlTFnRkkJVcIvS1ooZLlwEe4Giyql2+/65+PQRQviZTBC
-# xrQyDSEtrrgcp34WFvjVswtDy4pn4P7TrPpU8NkvLF0x+LdZzwTfnd6WLgsyEGFK
-# oUWhzB2x8mLXyfCSLGIdlki0P2zsGCJ6EBM6pOtjennitClPsiJEKgwOtDhLUsuM
-# isQtM00XEacn0fO8wB7WXOOIQ72khT7aDk4zIGWnoyWMluCaTaL3iszlocRg8z0W
-# JuALgmVxtDCFAQ7m3P/xq0QG+fof1tOxnTXiM7t/DWTctVGFu+FT7KHie4ZAZtW6
-# ITnndYxlawVMbZFjdG/7VrzYvYEgVw4vJh0aXyFFXoNJ3hUNE/JB3d55hFjZvAVo
-# vozw8GaSiFdVqyzkJz7V/155l5Eu55CjwH7k2A==
+# p6EZTQwcV7gpMA0GCSqGSIb3DQEBCwUABIIBgJn1FnefxaXs3VmIXIeFKd/mo7Th
+# 1DLAa88uHPPjF2sXo3plznOZ1G6Ys7mKIG3ZK47CTSSoprw8Rtgjr4uM5j6qVycO
+# 3UNFc4K3cVfjL/yN914uhkJuuhDjyRbWjcYamkdUiKkBvRkCkh5pfnRUv7DGKJs2
+# MzfgBf+6/5aEOY0oe6qu3aCOMGAH2zSBg5f9jzOqJZq2H98DtnVKcCq1sYUmR6mJ
+# 3eLNjsdgoSnnVo9QZGz2QM7t4AFZPAbNOyhBzNCl3HPBt4R8iApCFQ7LllHXfpgm
+# nMgHK1bikKGqu4SfLvYTw8L3cwxQ8AaXuYRCAf/INn7knfPmAupbUwTj25eQD0h4
+# gd9EzxBe7kft9VPtBBzLwUUegyGG8mcUV5PevhFphb6k2d2gZfWclZdLxtFPQxB1
+# AZ2iAaISGJTKR0D/Tb4TzxbcXDnhR+/n/yTlHe3BkL2xlIyR4T0PGHIVOVuI1T15
+# v785iKBaLV//ojEJo+8J9XszfM4v+0dpbtbY0Q==
 # SIG # End signature block
