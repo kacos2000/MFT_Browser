@@ -1,8 +1,8 @@
 # [MFT_Browser](https://github.com/kacos2000/MFT_Browser/releases/latest)
 
 <!-- ![MFT_Browser](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/MFTbrowser.jpg) -->
-[![MFTbrowser Video]([https://i.stack.imgur.com/XCRlR.png](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/undefined-high.gif))](https://vimeo.com/890690247 "$MFT Browser - Click to Watch!")
-# ![MFTbrowser animation](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/b38GPgFsUh.gif)
+[![MFTbrowser Video](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/undefined-high.gif)](https://vimeo.com/890690247 "$MFT Browser - Click to Watch!")
+<!-- ! ![MFTbrowser animation](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/b38GPgFsUh.gif) -->
 
 - Recreates the File/Directory tree structure from an *(extracted)* $MFT file.
 - Able to carve FILE records & recreate a Directory tree from a Raw Image *(v.60+)*
