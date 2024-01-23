@@ -5,9 +5,9 @@
 <!-- ! ![MFTbrowser animation](https://raw.githubusercontent.com/kacos2000/MFT_Browser/master/I/b38GPgFsUh.gif) -->
 
 - Recreates the File/Directory tree structure from an *(extracted)* $MFT file.
-- Able to carve FILE records & recreate a Directory tree from a Raw Image *(v.60+)*
-- Able to extract the $MFT & recreate the Directory tree from a mounted NTFS volume *(Volume must have a drive letter)* *(v.60+)*
 - Supports both 1024 & 4096 byte long records
+- Able to carve FILE records & recreate a Directory tree from a Raw Image *(v.60+)*
+- Able to extract the $MFT & recreate the Directory tree from a mounted NTFS volume *(Volume must have a drive letter) (v.60+)*
 -----------------
 
 ==> **[Latest Version](https://github.com/kacos2000/MFT_Browser/releases/latest)** <==
