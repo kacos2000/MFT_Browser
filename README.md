@@ -22,7 +22,7 @@
 - All timestamps are in UTC
 
 -----------------
-Standalone Calc for Dataruns:<br>
+Standalone GUI Calc for Dataruns:<br>
 => [MFT_dataruns](https://github.com/kacos2000/MFT_dataruns)
 
 -----------------
