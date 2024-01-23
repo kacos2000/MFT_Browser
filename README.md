@@ -21,6 +21,11 @@
 - Clicking on any detail of the record, shows the source of the detail in the Hex view grid.
 - All timestamps are in UTC
 
+-----------------
+Standalone Calc for Dataruns:<br>
+=> [MFT_dataruns](https://github.com/kacos2000/MFT_dataruns)
+
+-----------------
 ### Note:
 Recreating the directory tree from large MFT files might take a lot of time, *(possibly hour(s))*, as it needs to map each child record to it's parent node, and as the structure grows, the time needed grows exponentially.
 
