@@ -1,4 +1,4 @@
-﻿<#
+<#
 	.SYNOPSIS
 		Decodes an ObjectID GUID
 	
@@ -22,7 +22,9 @@
 		System.Management.Automation.PSObject
 	
 	.NOTES
-		Additional information about the function.
+		Costas Katsavounidis
+        https://github.com/kacos2000
+        
 #>
 function Get-ObjectIdFromHex
 {
@@ -53,7 +55,7 @@ function Get-ObjectIdFromHex
 		$PS_ObjectID | Add-Member -Type NoteProperty -Name 'ObjectID' -Value $ObjectID
 		
 		$version = [Convert]::ToUInt64("0x$($hex.Substring(14, 1))", 16)
-		$vs = [convert]::ToString("0x$($objid.Substring(19, 4))", 2)
+		$vs = [convert]::ToString("0x$($objid.Substring(19, 4))", 2).PadLeft(16, '0')
 		$variant = [Convert]::ToInt16($vs.Substring(0, 2), 2)
 		$Sequence = [Convert]::ToInt16($vs.Substring(2, 14), 2)
 		
@@ -80,7 +82,7 @@ function Get-ObjectIdFromHex
 			$1582offset = (New-Object DateTime(1582, 10, 15, 0, 0, 0)).Ticks
 			$1601offset = (New-Object DateTime(1601, 1, 1, 0, 0, 0)).Ticks
 			# Calculate the Date after substracting the two Date offsets
-			$ObjectIdCreated = [datetime]::FromFileTimeUtc($timedec - ($1601offset - $1582offset)).ToString("dd/MM/yyyy HH:mm:ss.fffffff")
+			$ObjectIdCreated = [datetime]::FromFileTimeUtc($timedec - ($1601offset - $1582offset)).ToString("dd-MMM-yyyy HH:mm:ss.fffffff")
 			
 			# Add to pscustomobject	
 			$PS_ObjectID | Add-Member -Type NoteProperty -Name 'Created' -Value $ObjectIdCreated
@@ -90,6 +92,7 @@ function Get-ObjectIdFromHex
 			
 			# Add to pscustomobject	
 			$PS_ObjectID | Add-Member -Type NoteProperty -Name 'MAC' -Value $mac
+            		# MacLookup => "https://api.maclookup.app/v2/macs/MAC-ADDRESS/company/name"
 		}
 		# output
 		$PS_ObjectID
