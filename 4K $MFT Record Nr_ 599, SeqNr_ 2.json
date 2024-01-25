@@ -1,0 +1,134 @@
+﻿{
+    "$MFT Record Nr: 599, SeqNr: 2":  {
+                                          " .\\DeliveryOptimization\\Cache\\dfb75392724044de37fe5f359e99a00299b8641a\\content.bin":  "",
+                                          "content.bin":  "",
+                                          "Header":  {
+                                                         "[0x257000] $MFT Record ID":  "0002000000000257",
+                                                         "[0x257000] Record Offset":  "2453504",
+                                                         "[0x00] Signature":  "FILE",
+                                                         "[0x04] Offset to Update Sequence Array":  "48",
+                                                         "[0x06] Number of fix up byte pairs":  "9",
+                                                         "[0x08] $LogFile Sequence Number (LSN)":  "184681709",
+                                                         "[0x10] $MFT Record Sequence Nr":  "2",
+                                                         "[0x12] Hard Link Count":  "1",
+                                                         "[0x14] Offset to 1st Attribute":  "72",
+                                                         "[0x16] Allocation Status: 0x0001":  {
+                                                                                                  "Flag bit [14]":  "File,",
+                                                                                                  "Flag bit [15]":  "In Use"
+                                                                                              },
+                                                         "[0x18] Logical Size of MFT record":  "432",
+                                                         "[0x1C] Physical Size of MFT record":  "4096",
+                                                         "[0x20] Base Record":  "0",
+                                                         "[0x26] Base Record SeqNr":  "0",
+                                                         "[0x28] Next Available Attribute ID":  "4",
+                                                         "[0x2A] $MFT Record Nr":  "599",
+                                                         "[0x30] Update sequence Number":  "5",
+                                                         "[0x30] Update sequence/FixUp Value":  "0x0500",
+                                                         "[0x32] FixUp #1":  "0x0000",
+                                                         "[0x34] FixUp #2":  "0x0000",
+                                                         "[0x36] FixUp #3":  "0x0000",
+                                                         "[0x38] FixUp #4":  "0x0000",
+                                                         "[0x3A] FixUp #5":  "0x0000",
+                                                         "[0x3C] FixUp #6":  "0x0000",
+                                                         "[0x3E] FixUp #7":  "0x0000",
+                                                         "[0x40] FixUp #8":  "0x0000",
+                                                         "[0x1FE] Check Value #1":  "0x0500",
+                                                         "[0x3FE] Check Value #2":  "0x0500",
+                                                         "[0x5FE] Check Value #3":  "0x0500",
+                                                         "[0x7FE] Check Value #4":  "0x0500",
+                                                         "[0x9FE] Check Value #5":  "0x0500",
+                                                         "[0xBFE] Check Value #6":  "0x0500",
+                                                         "[0xDFE] Check Value #7":  "0x0500",
+                                                         "[0xFFE] Check Value #8":  "0x0500"
+                                                     },
+                                          "Attributes":  {
+                                                             "[0x048] ID: 00000, Type: (016) 10000000 - $Standard_Information ":  {
+                                                                                                                                      "[0x04C] Attribute Length":  "96",
+                                                                                                                                      "[0x050] Attribute Non-Resident Status":  "Resident",
+                                                                                                                                      "[0x051] Length of Stream Name":  "0",
+                                                                                                                                      "[0x052] Offset to Stream Name":  "0",
+                                                                                                                                      "[0x054] Attribute Flags":  "0x0000",
+                                                                                                                                      "[0x056] Attribute ID":  "0",
+                                                                                                                                      "[0x058] Resident Content Size":  "72",
+                                                                                                                                      "[0x05C] Resident Content Offset":  "24",
+                                                                                                                                      "[0x060] File Created":  "07-Oct-2021 15:56:08.0527266",
+                                                                                                                                      "[0x068] File Modified":  "07-Oct-2021 15:56:40.6221387",
+                                                                                                                                      "[0x070] MFT Record Modified":  "07-Oct-2021 15:56:40.6221387",
+                                                                                                                                      "[0x078] File Last Accessed":  "07-Oct-2021 15:56:40.6221387",
+                                                                                                                                      "[0x080] File Type Flags: 0x00000220":  {
+                                                                                                                                                                                  "Flag bit [05]":  "Archive",
+                                                                                                                                                                                  "Flag bit [09]":  "Sparse_File"
+                                                                                                                                                                              },
+                                                                                                                                      "[0x084] Max Number of Versions":  "Disabled",
+                                                                                                                                      "[0x089] Reserve Storage ID":  "None (00)",
+                                                                                                                                      "[0x094] Security ID":  "301",
+                                                                                                                                      "[0x0A0] Update sequence number (USN)":  "22766880"
+                                                                                                                                  },
+                                                             "[0x0A8] ID: 00002, Type: (048) 30000000 - $File_Name ":  {
+                                                                                                                           "[0x0AC] Attribute Length":  "112",
+                                                                                                                           "[0x0B0] Attribute Non-Resident Status":  "Resident",
+                                                                                                                           "[0x0B1] Length of Stream Name":  "0",
+                                                                                                                           "[0x0B2] Offset to Stream Name":  "0",
+                                                                                                                           "[0x0B4] Attribute Flags":  "0x0000",
+                                                                                                                           "[0x0B6] Attribute ID":  "2",
+                                                                                                                           "[0x0B8] Resident Content Size":  "88",
+                                                                                                                           "[0x0BC] Resident Content Offset":  "24",
+                                                                                                                           "[0x0BE] Indexed Flag":  "Indexed",
+                                                                                                                           "[0x0C0] Parent Directory":  "597",
+                                                                                                                           "[0x0C6] Parent Directory SeqNr":  "2",
+                                                                                                                           "[-----] Parent ID":  "0002000000000255",
+                                                                                                                           "[0x0C8] File Created":  "07-Oct-2021 15:56:08.0527266",
+                                                                                                                           "[0x0D0] File Modified":  "07-Oct-2021 15:56:08.0527266",
+                                                                                                                           "[0x0D8] File MFT Modified":  "07-Oct-2021 15:56:08.0527266",
+                                                                                                                           "[0x0E0] File Last Accessed":  "07-Oct-2021 15:56:08.0527266",
+                                                                                                                           "[0x0E8] File Allocated Size":  "0",
+                                                                                                                           "[0x0F0] File Real Size":  "0",
+                                                                                                                           "[0x0F8] File Type Flags: 0x00000020":  {
+                                                                                                                                                                       "Flag bit [05]":  "Archive"
+                                                                                                                                                                   },
+                                                                                                                           "[0x100] Filename Length":  "11",
+                                                                                                                           "[0x101] Filename type 0":  {
+                                                                                                                                                           "[0x101] Filename Namespace":  "POSIX"
+                                                                                                                                                       },
+                                                                                                                           "[0x102] Filename":  "content.bin"
+                                                                                                                       },
+                                                             "[0x118] ID: 00003, Type: (128) 80000000 - $Data ":  {
+                                                                                                                      "[0x11C] Attribute Length":  "144",
+                                                                                                                      "[0x120] Attribute Non-Resident Status":  "Non-Resident",
+                                                                                                                      "[0x121] Length of Stream Name":  "0",
+                                                                                                                      "[0x122] Offset to Stream Name":  "0",
+                                                                                                                      "[0x124] Attribute Flags: 0x0080":  {
+                                                                                                                                                              "Flag bit [08]":  "Sparse"
+                                                                                                                                                          },
+                                                                                                                      "[0x126] Attribute ID":  "3",
+                                                                                                                      "[0x128] Start VCN":  "0",
+                                                                                                                      "[0x130] End VCN":  "98783",
+                                                                                                                      "[0x138] Datarun Offset":  "72",
+                                                                                                                      "[0x13A] Compression Unit Size":  "16kb",
+                                                                                                                      "[-----] Cluster Size":  "4096",
+                                                                                                                      "[0x140] Attribute Allocated Size":  "404.619.264",
+                                                                                                                      "[0x148] Attribute Actual Size":  "404.577.456",
+                                                                                                                      "[0x150] Attribute Initialized Size":  "404.577.456",
+                                                                                                                      "[0x158] Total Allocated size":  "204.341.248",
+                                                                                                                      "[-----] Attribute (On-Disk) Slack":  "41808",
+                                                                                                                      "[0x160] DataRun:  0300BF00321605575201320607D2BA1C221F07D2C932590EB572E632BD1A03E41432471FA2BFEB3273206B1F1432F50DC152EC222E16411032D221A2C61A32E0000C1BE100000000":  {
+                                                                                                                                                                                                                                                                                                 "[ * ] Extend #1":  "[Offset] [ Sparse ] - [Length] 200.278.016 bytes",
+                                                                                                                                                                                                                                                                                                 "[ * ] Extend #2":  "[Offset] 354.775.040 - [Length] 5.332.992 bytes",
+                                                                                                                                                                                                                                                                                                 "[ * ] Extend #3":  "[Offset] 8.066.863.104 - [Length] 7.364.608 bytes",
+                                                                                                                                                                                                                                                                                                 "[ * ] Extend #4":  "[Offset] 8.010.051.584 - [Length] 7.467.008 bytes",
+                                                                                                                                                                                                                                                                                                 "[ * ] Extend #5":  "[Offset] 1.151.008.768 - [Length] 15.044.608 bytes",
+                                                                                                                                                                                                                                                                                                 "[ * ] Extend #6":  "[Offset] 6.758.805.504 - [Length] 28.037.120 bytes",
+                                                                                                                                                                                                                                                                                                 "[ * ] Extend #7":  "[Offset] 1.322.602.496 - [Length] 32.796.672 bytes",
+                                                                                                                                                                                                                                                                                                 "[ * ] Extend #8":  "[Offset] 6.724.255.744 - [Length] 34.025.472 bytes",
+                                                                                                                                                                                                                                                                                                 "[ * ] Extend #9":  "[Offset] 1.442.320.384 - [Length] 14.635.008 bytes",
+                                                                                                                                                                                                                                                                                                 "[ * ] Extend #10":  "[Offset] 1.459.363.840 - [Length] 23.257.088 bytes",
+                                                                                                                                                                                                                                                                                                 "[ * ] Extend #11":  "[Offset] 8.646.967.296 - [Length] 35.463.168 bytes",
+                                                                                                                                                                                                                                                                                                 "[ * ] Extend #12":  "[Offset] 353.828.864 - [Length] 875.696 bytes"
+                                                                                                                                                                                                                                                                                             }
+                                                                                                                  }
+                                                         },
+                                          "Record Slack":  {
+                                                               "[0x1B0] Record Slack size":  "3664"
+                                                           }
+                                      }
+}

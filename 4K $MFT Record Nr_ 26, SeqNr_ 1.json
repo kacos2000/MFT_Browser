@@ -1,0 +1,227 @@
+﻿{
+    "$MFT Record Nr: 26, SeqNr: 1":  {
+                                         " .\\$Extend\\$Reparse":  "",
+                                         "$Reparse":  "",
+                                         "Header":  {
+                                                        "[0x1A000] $MFT Record ID":  "000100000000001A",
+                                                        "[0x1A000] Record Offset":  "106496",
+                                                        "[0x00] Signature":  "FILE",
+                                                        "[0x04] Offset to Update Sequence Array":  "48",
+                                                        "[0x06] Number of fix up byte pairs":  "9",
+                                                        "[0x08] $LogFile Sequence Number (LSN)":  "158158656",
+                                                        "[0x10] $MFT Record Sequence Nr":  "1",
+                                                        "[0x12] Hard Link Count":  "1",
+                                                        "[0x14] Offset to 1st Attribute":  "72",
+                                                        "[0x16] Allocation Status: 0x000D":  {
+                                                                                                 "Flag bit [12]":  "Has View_Index (Other than $I30),",
+                                                                                                 "Flag bit [13]":  "In $Extend Directory",
+                                                                                                 "Flag bit [14]":  "File,",
+                                                                                                 "Flag bit [15]":  "In Use"
+                                                                                             },
+                                                        "[0x18] Logical Size of MFT record":  "696",
+                                                        "[0x1C] Physical Size of MFT record":  "4096",
+                                                        "[0x20] Base Record":  "0",
+                                                        "[0x26] Base Record SeqNr":  "0",
+                                                        "[0x28] Next Available Attribute ID":  "6",
+                                                        "[0x2A] $MFT Record Nr":  "26",
+                                                        "[0x30] Update sequence Number":  "7",
+                                                        "[0x30] Update sequence/FixUp Value":  "0x0700",
+                                                        "[0x32] FixUp #1":  "0x0000",
+                                                        "[0x34] FixUp #2":  "0x0000",
+                                                        "[0x36] FixUp #3":  "0x0000",
+                                                        "[0x38] FixUp #4":  "0x0000",
+                                                        "[0x3A] FixUp #5":  "0x0000",
+                                                        "[0x3C] FixUp #6":  "0x0000",
+                                                        "[0x3E] FixUp #7":  "0x0000",
+                                                        "[0x40] FixUp #8":  "0x0000",
+                                                        "[0x1FE] Check Value #1":  "0x0700",
+                                                        "[0x3FE] Check Value #2":  "0x0700",
+                                                        "[0x5FE] Check Value #3":  "0x0700",
+                                                        "[0x7FE] Check Value #4":  "0x0700",
+                                                        "[0x9FE] Check Value #5":  "0x0700",
+                                                        "[0xBFE] Check Value #6":  "0x0700",
+                                                        "[0xDFE] Check Value #7":  "0x0700",
+                                                        "[0xFFE] Check Value #8":  "0x0700"
+                                                    },
+                                         "Attributes":  {
+                                                            "[0x048] ID: 00000, Type: (016) 10000000 - $Standard_Information ":  {
+                                                                                                                                     "[0x04C] Attribute Length":  "96",
+                                                                                                                                     "[0x050] Attribute Non-Resident Status":  "Resident",
+                                                                                                                                     "[0x051] Length of Stream Name":  "0",
+                                                                                                                                     "[0x052] Offset to Stream Name":  "0",
+                                                                                                                                     "[0x054] Attribute Flags":  "0x0000",
+                                                                                                                                     "[0x056] Attribute ID":  "0",
+                                                                                                                                     "[0x058] Resident Content Size":  "72",
+                                                                                                                                     "[0x05C] Resident Content Offset":  "24",
+                                                                                                                                     "[0x060] File Created":  "07-Oct-2021 14:44:32.5994800",
+                                                                                                                                     "[0x068] File Modified":  "07-Oct-2021 14:44:32.5994800",
+                                                                                                                                     "[0x070] MFT Record Modified":  "07-Oct-2021 14:44:32.5994800",
+                                                                                                                                     "[0x078] File Last Accessed":  "07-Oct-2021 15:04:53.9740690",
+                                                                                                                                     "[0x080] File Type Flags: 0x20000006":  {
+                                                                                                                                                                                 "Flag bit [01]":  "Hidden",
+                                                                                                                                                                                 "Flag bit [02]":  "System"
+                                                                                                                                                                             },
+                                                                                                                                     "[0x084] Max Number of Versions":  "Disabled",
+                                                                                                                                     "[0x089] Reserve Storage ID":  "None (00)",
+                                                                                                                                     "[0x094] Security ID":  "257"
+                                                                                                                                 },
+                                                            "[0x0A8] ID: 00001, Type: (048) 30000000 - $File_Name ":  {
+                                                                                                                          "[0x0AC] Attribute Length":  "112",
+                                                                                                                          "[0x0B0] Attribute Non-Resident Status":  "Resident",
+                                                                                                                          "[0x0B1] Length of Stream Name":  "0",
+                                                                                                                          "[0x0B2] Offset to Stream Name":  "0",
+                                                                                                                          "[0x0B4] Attribute Flags":  "0x0000",
+                                                                                                                          "[0x0B6] Attribute ID":  "1",
+                                                                                                                          "[0x0B8] Resident Content Size":  "82",
+                                                                                                                          "[0x0BC] Resident Content Offset":  "24",
+                                                                                                                          "[0x0BE] Indexed Flag":  "Indexed",
+                                                                                                                          "[0x0C0] Parent Directory":  "11",
+                                                                                                                          "[0x0C6] Parent Directory SeqNr":  "11",
+                                                                                                                          "[-----] Parent ID":  "000B00000000000B",
+                                                                                                                          "[0x0C8] File Created":  "07-Oct-2021 14:44:32.5994800",
+                                                                                                                          "[0x0D0] File Modified":  "07-Oct-2021 14:44:32.5994800",
+                                                                                                                          "[0x0D8] File MFT Modified":  "07-Oct-2021 14:44:32.5994800",
+                                                                                                                          "[0x0E0] File Last Accessed":  "07-Oct-2021 14:44:32.5994800",
+                                                                                                                          "[0x0E8] File Allocated Size":  "0",
+                                                                                                                          "[0x0F0] File Real Size":  "0",
+                                                                                                                          "[0x0F8] File Type Flags: 0x20000006":  {
+                                                                                                                                                                      "Flag bit [01]":  "Hidden",
+                                                                                                                                                                      "Flag bit [02]":  "System",
+                                                                                                                                                                      "Flag bit [29]":  "View_Index"
+                                                                                                                                                                  },
+                                                                                                                          "[0x100] Filename Length":  "8",
+                                                                                                                          "[0x101] Filename type 0":  {
+                                                                                                                                                          "[0x101] Filename Namespace":  "POSIX"
+                                                                                                                                                      },
+                                                                                                                          "[0x102] Filename":  "$Reparse"
+                                                                                                                      },
+                                                            "[0x118] ID: 00005, Type: (144) 90000000 - $Index_Root ":  {
+                                                                                                                           "[0x11C] Attribute Length":  "288",
+                                                                                                                           "[0x120] Attribute Non-Resident Status":  "Resident",
+                                                                                                                           "[0x121] Length of Stream Name":  "2",
+                                                                                                                           "[0x122] Offset to Stream Name":  "24",
+                                                                                                                           "[0x124] Attribute Flags":  "0x0000",
+                                                                                                                           "[0x126] Attribute ID":  "5",
+                                                                                                                           "[0x128] Resident Content Size":  "256",
+                                                                                                                           "[0x12C] Resident Content Offset":  "32",
+                                                                                                                           "[0x130] Stream Name":  "$R",
+                                                                                                                           "[0x138] Attribute Type":  "00000000",
+                                                                                                                           "[0x13C] Collation Sorting Rule":  "Multiple Unsigned Longs (0x00000013)",
+                                                                                                                           "[0x140] Size of Index Record in Bytes":  "4096",
+                                                                                                                           "[0x144] Size of Index Record in Clusters":  "1",
+                                                                                                                           "[0x148] Offset to First Index Entry":  "16 (0x00000010)",
+                                                                                                                           "[0x14C] Offset to end of used portion of index entry list":  "240",
+                                                                                                                           "[0x150] Offset to end of allocated index entry list buffer":  "240",
+                                                                                                                           "[0x154] Flag [0x01]":  "Index points to $Index_Allocation Child Nodes",
+                                                                                                                           "Index Entries":  {
+                                                                                                                                                 "Index Entry Nr: 1":  {
+                                                                                                                                                                           "[0x158] Index Entry Offset to Data":  "28",
+                                                                                                                                                                           "[0x15A] Index Entry Data Size":  "0",
+                                                                                                                                                                           "[0x160] Index Entry Length":  "40",
+                                                                                                                                                                           "[0x162] Index Entry Key Size":  "12",
+                                                                                                                                                                           "[0x164] Index Entry Flag [0x01]":  "Child node in $Index_Allocation",
+                                                                                                                                                                           "[0x168] Index Entry Key: IO_REPARSE_TAG_CLOUD_4":  {
+                                                                                                                                                                                                                                   "[0x168] Reparse Tag":  "9000401A",
+                                                                                                                                                                                                                                   "[-----] Reference MFT record ID":  "000200000000006F",
+                                                                                                                                                                                                                                   "[0x16C] Reference MFT record Nr":  "111",
+                                                                                                                                                                                                                                   "[0x172] Reference MFT Sequence Nr":  "2"
+                                                                                                                                                                                                                               }
+                                                                                                                                                                       },
+                                                                                                                                                 "Index Entry Nr: 2":  {
+                                                                                                                                                                           "[0x180] Index Entry Offset to Data":  "28",
+                                                                                                                                                                           "[0x182] Index Entry Data Size":  "0",
+                                                                                                                                                                           "[0x188] Index Entry Length":  "40",
+                                                                                                                                                                           "[0x18A] Index Entry Key Size":  "12",
+                                                                                                                                                                           "[0x18C] Index Entry Flag [0x01]":  "Child node in $Index_Allocation",
+                                                                                                                                                                           "[0x190] Index Entry Key: IO_REPARSE_TAG_CLOUD_4":  {
+                                                                                                                                                                                                                                   "[0x190] Reparse Tag":  "9000401A",
+                                                                                                                                                                                                                                   "[-----] Reference MFT record ID":  "00020000000000AE",
+                                                                                                                                                                                                                                   "[0x194] Reference MFT record Nr":  "174",
+                                                                                                                                                                                                                                   "[0x19A] Reference MFT Sequence Nr":  "2"
+                                                                                                                                                                                                                               }
+                                                                                                                                                                       },
+                                                                                                                                                 "Index Entry Nr: 3":  {
+                                                                                                                                                                           "[0x1A8] Index Entry Offset to Data":  "28",
+                                                                                                                                                                           "[0x1AA] Index Entry Data Size":  "0",
+                                                                                                                                                                           "[0x1B0] Index Entry Length":  "40",
+                                                                                                                                                                           "[0x1B2] Index Entry Key Size":  "12",
+                                                                                                                                                                           "[0x1B4] Index Entry Flag [0x01]":  "Child node in $Index_Allocation",
+                                                                                                                                                                           "[0x1B8] Index Entry Key: IO_REPARSE_TAG_CLOUD_4":  {
+                                                                                                                                                                                                                                   "[0x1B8] Reparse Tag":  "9000401A",
+                                                                                                                                                                                                                                   "[-----] Reference MFT record ID":  "00020000000000EF",
+                                                                                                                                                                                                                                   "[0x1BC] Reference MFT record Nr":  "239",
+                                                                                                                                                                                                                                   "[0x1C2] Reference MFT Sequence Nr":  "2"
+                                                                                                                                                                                                                               }
+                                                                                                                                                                       },
+                                                                                                                                                 "Index Entry Nr: 4":  {
+                                                                                                                                                                           "[0x1D0] Index Entry Offset to Data":  "28",
+                                                                                                                                                                           "[0x1D2] Index Entry Data Size":  "0",
+                                                                                                                                                                           "[0x1D8] Index Entry Length":  "40",
+                                                                                                                                                                           "[0x1DA] Index Entry Key Size":  "12",
+                                                                                                                                                                           "[0x1DC] Index Entry Flag [0x01]":  "Child node in $Index_Allocation",
+                                                                                                                                                                           "[0x1E0] Index Entry Key: IO_REPARSE_TAG_CLOUD_4":  {
+                                                                                                                                                                                                                                   "[0x1E0] Reparse Tag":  "9000401A",
+                                                                                                                                                                                                                                   "[-----] Reference MFT record ID":  "0002000000000137",
+                                                                                                                                                                                                                                   "[0x1E4] Reference MFT record Nr":  "311",
+                                                                                                                                                                                                                                   "[0x1EA] Reference MFT Sequence Nr":  "2"
+                                                                                                                                                                                                                               }
+                                                                                                                                                                       },
+                                                                                                                                                 "Index Entry Nr: 5":  {
+                                                                                                                                                                           "[0x1F8] Index Entry Offset to Data":  "28",
+                                                                                                                                                                           "[0x1FA] Index Entry Data Size":  "0",
+                                                                                                                                                                           "[0x200] Index Entry Length":  "40",
+                                                                                                                                                                           "[0x202] Index Entry Key Size":  "12",
+                                                                                                                                                                           "[0x204] Index Entry Flag [0x01]":  "Child node in $Index_Allocation",
+                                                                                                                                                                           "[0x208] Index Entry Key: IO_REPARSE_TAG_CLOUD_4":  {
+                                                                                                                                                                                                                                   "[0x208] Reparse Tag":  "9000401A",
+                                                                                                                                                                                                                                   "[-----] Reference MFT record ID":  "000200000000017A",
+                                                                                                                                                                                                                                   "[0x20C] Reference MFT record Nr":  "378",
+                                                                                                                                                                                                                                   "[0x212] Reference MFT Sequence Nr":  "2"
+                                                                                                                                                                                                                               }
+                                                                                                                                                                       },
+                                                                                                                                                 "Index Entry Nr: 6":  {
+                                                                                                                                                                           "[0x220] Index Entry Offset to Data":  "0",
+                                                                                                                                                                           "[0x222] Index Entry Data Size":  "0",
+                                                                                                                                                                           "[0x228] Index Entry Length":  "24",
+                                                                                                                                                                           "[0x22A] Index Entry Key Size":  "0",
+                                                                                                                                                                           "[0x22C] Index Entry Flag [0x03]":  "Last Entry, Child node in $Index_Allocation"
+                                                                                                                                                                       }
+                                                                                                                                             }
+                                                                                                                       },
+                                                            "[0x238] ID: 00003, Type: (160) A0000000 - $Index_Allocation ":  {
+                                                                                                                                 "[0x23C] Attribute Length":  "80",
+                                                                                                                                 "[0x240] Attribute Non-Resident Status":  "Non-Resident",
+                                                                                                                                 "[0x241] Length of Stream Name":  "2",
+                                                                                                                                 "[0x242] Offset to Stream Name":  "64",
+                                                                                                                                 "[0x244] Attribute Flags":  "0x0000",
+                                                                                                                                 "[0x246] Attribute ID":  "3",
+                                                                                                                                 "[0x278] Stream Name":  "$R",
+                                                                                                                                 "[0x248] Start VCN":  "0",
+                                                                                                                                 "[0x250] End VCN":  "5",
+                                                                                                                                 "[0x258] Datarun Offset":  "72",
+                                                                                                                                 "[-----] Cluster Size":  "4096",
+                                                                                                                                 "[0x260] Attribute Allocated Size":  "24.576",
+                                                                                                                                 "[0x268] Attribute Actual Size":  "24.576",
+                                                                                                                                 "[0x270] Attribute Initialized Size":  "24.576",
+                                                                                                                                 "[0x280] DataRun:  3106DA0C1E000000":  {
+                                                                                                                                                                            "[ * ] Extend #1":  "[Offset] 8.066.539.520 - [Length] 24.576 bytes"
+                                                                                                                                                                        }
+                                                                                                                             },
+                                                            "[0x288] ID: 00004, Type: (176) B0000000 - $Bitmap ":  {
+                                                                                                                       "[0x28C] Attribute Length":  "40",
+                                                                                                                       "[0x290] Attribute Non-Resident Status":  "Resident",
+                                                                                                                       "[0x291] Length of Stream Name":  "2",
+                                                                                                                       "[0x292] Offset to Stream Name":  "24",
+                                                                                                                       "[0x294] Attribute Flags":  "0x0000",
+                                                                                                                       "[0x296] Attribute ID":  "4",
+                                                                                                                       "[0x298] Resident Content Size":  "8",
+                                                                                                                       "[0x29C] Resident Content Offset":  "32",
+                                                                                                                       "[0x2A0] Stream Name":  "$R",
+                                                                                                                       "[0x2A8] Resident Content":  ""
+                                                                                                                   }
+                                                        },
+                                         "Record Slack":  {
+                                                              "[0x2B8] Record Slack size":  "3400"
+                                                          }
+                                     }
+}

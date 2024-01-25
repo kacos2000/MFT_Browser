@@ -1,0 +1,151 @@
+﻿{
+    "$MFT Record Nr: 429, SeqNr: 2":  {
+                                          " .\\OneDrive\\flags.xlsx":  "",
+                                          "flags.xlsx":  "",
+                                          "Header":  {
+                                                         "[0x1AD000] $MFT Record ID":  "00020000000001AD",
+                                                         "[0x1AD000] Record Offset":  "1757184",
+                                                         "[0x00] Signature":  "FILE",
+                                                         "[0x04] Offset to Update Sequence Array":  "48",
+                                                         "[0x06] Number of fix up byte pairs":  "9",
+                                                         "[0x08] $LogFile Sequence Number (LSN)":  "158163114",
+                                                         "[0x10] $MFT Record Sequence Nr":  "2",
+                                                         "[0x12] Hard Link Count":  "1",
+                                                         "[0x14] Offset to 1st Attribute":  "72",
+                                                         "[0x16] Allocation Status: 0x0001":  {
+                                                                                                  "Flag bit [14]":  "File,",
+                                                                                                  "Flag bit [15]":  "In Use"
+                                                                                              },
+                                                         "[0x18] Logical Size of MFT record":  "616",
+                                                         "[0x1C] Physical Size of MFT record":  "4096",
+                                                         "[0x20] Base Record":  "0",
+                                                         "[0x26] Base Record SeqNr":  "0",
+                                                         "[0x28] Next Available Attribute ID":  "4",
+                                                         "[0x2A] $MFT Record Nr":  "429",
+                                                         "[0x30] Update sequence Number":  "2",
+                                                         "[0x30] Update sequence/FixUp Value":  "0x0200",
+                                                         "[0x32] FixUp #1":  "0x3135",
+                                                         "[0x34] FixUp #2":  "0x0000",
+                                                         "[0x36] FixUp #3":  "0x0000",
+                                                         "[0x38] FixUp #4":  "0x0000",
+                                                         "[0x3A] FixUp #5":  "0x0000",
+                                                         "[0x3C] FixUp #6":  "0x0000",
+                                                         "[0x3E] FixUp #7":  "0x0000",
+                                                         "[0x40] FixUp #8":  "0x0000",
+                                                         "[0x1FE] Check Value #1":  "0x0200",
+                                                         "[0x3FE] Check Value #2":  "0x0200",
+                                                         "[0x5FE] Check Value #3":  "0x0200",
+                                                         "[0x7FE] Check Value #4":  "0x0200",
+                                                         "[0x9FE] Check Value #5":  "0x0200",
+                                                         "[0xBFE] Check Value #6":  "0x0200",
+                                                         "[0xDFE] Check Value #7":  "0x0200",
+                                                         "[0xFFE] Check Value #8":  "0x0200"
+                                                     },
+                                          "Attributes":  {
+                                                             "[0x048] ID: 00000, Type: (016) 10000000 - $Standard_Information ":  {
+                                                                                                                                      "[0x04C] Attribute Length":  "96",
+                                                                                                                                      "[0x050] Attribute Non-Resident Status":  "Resident",
+                                                                                                                                      "[0x051] Length of Stream Name":  "0",
+                                                                                                                                      "[0x052] Offset to Stream Name":  "0",
+                                                                                                                                      "[0x054] Attribute Flags":  "0x0000",
+                                                                                                                                      "[0x056] Attribute ID":  "0",
+                                                                                                                                      "[0x058] Resident Content Size":  "72",
+                                                                                                                                      "[0x05C] Resident Content Offset":  "24",
+                                                                                                                                      "[0x060] File Created":  "07-Oct-2021 15:10:32.0223096",
+                                                                                                                                      "[0x068] File Modified":  "09-Sep-2021 11:22:57.0000000",
+                                                                                                                                      "[0x070] MFT Record Modified":  "07-Oct-2021 15:10:32.0223096",
+                                                                                                                                      "[0x078] File Last Accessed":  "07-Oct-2021 15:10:32.0223096",
+                                                                                                                                      "[0x080] File Type Flags: 0x00401620":  {
+                                                                                                                                                                                  "Flag bit [05]":  "Archive",
+                                                                                                                                                                                  "Flag bit [09]":  "Sparse_File",
+                                                                                                                                                                                  "Flag bit [10]":  "Reparse_Point",
+                                                                                                                                                                                  "Flag bit [12]":  "Offline",
+                                                                                                                                                                                  "Flag bit [22]":  "Recall_On_DataAccess"
+                                                                                                                                                                              },
+                                                                                                                                      "[0x084] Max Number of Versions":  "Disabled",
+                                                                                                                                      "[0x089] Reserve Storage ID":  "None (00)",
+                                                                                                                                      "[0x094] Security ID":  "275",
+                                                                                                                                      "[0x0A0] Update sequence number (USN)":  "22585480"
+                                                                                                                                  },
+                                                             "[0x0A8] ID: 00002, Type: (048) 30000000 - $File_Name ":  {
+                                                                                                                           "[0x0AC] Attribute Length":  "112",
+                                                                                                                           "[0x0B0] Attribute Non-Resident Status":  "Resident",
+                                                                                                                           "[0x0B1] Length of Stream Name":  "0",
+                                                                                                                           "[0x0B2] Offset to Stream Name":  "0",
+                                                                                                                           "[0x0B4] Attribute Flags":  "0x0000",
+                                                                                                                           "[0x0B6] Attribute ID":  "2",
+                                                                                                                           "[0x0B8] Resident Content Size":  "86",
+                                                                                                                           "[0x0BC] Resident Content Offset":  "24",
+                                                                                                                           "[0x0BE] Indexed Flag":  "Indexed",
+                                                                                                                           "[0x0C0] Parent Directory":  "40",
+                                                                                                                           "[0x0C6] Parent Directory SeqNr":  "2",
+                                                                                                                           "[-----] Parent ID":  "0002000000000028",
+                                                                                                                           "[0x0C8] File Created":  "07-Oct-2021 15:10:32.0223096",
+                                                                                                                           "[0x0D0] File Modified":  "09-Sep-2021 11:22:57.0000000",
+                                                                                                                           "[0x0D8] File MFT Modified":  "07-Oct-2021 15:10:32.0223096",
+                                                                                                                           "[0x0E0] File Last Accessed":  "07-Oct-2021 15:10:32.0223096",
+                                                                                                                           "[0x0E8] File Allocated Size":  "0",
+                                                                                                                           "[0x0F0] File Real Size":  "27026",
+                                                                                                                           "[0x0F8] File Type Flags: 0x00401220":  {
+                                                                                                                                                                       "Flag bit [05]":  "Archive",
+                                                                                                                                                                       "Flag bit [09]":  "Sparse_File",
+                                                                                                                                                                       "Flag bit [12]":  "Offline",
+                                                                                                                                                                       "Flag bit [22]":  "Recall_On_DataAccess"
+                                                                                                                                                                   },
+                                                                                                                           "[0x100] Filename Length":  "10",
+                                                                                                                           "[0x101] Filename type 0":  {
+                                                                                                                                                           "[0x101] Filename Namespace":  "POSIX"
+                                                                                                                                                       },
+                                                                                                                           "[0x102] Filename":  "flags.xlsx"
+                                                                                                                       },
+                                                             "[0x118] ID: 00001, Type: (128) 80000000 - $Data ":  {
+                                                                                                                      "[0x11C] Attribute Length":  "80",
+                                                                                                                      "[0x120] Attribute Non-Resident Status":  "Non-Resident",
+                                                                                                                      "[0x121] Length of Stream Name":  "0",
+                                                                                                                      "[0x122] Offset to Stream Name":  "0",
+                                                                                                                      "[0x124] Attribute Flags: 0x0080":  {
+                                                                                                                                                              "Flag bit [08]":  "Sparse"
+                                                                                                                                                          },
+                                                                                                                      "[0x126] Attribute ID":  "1",
+                                                                                                                      "[0x128] Start VCN":  "0",
+                                                                                                                      "[0x130] End VCN":  "15",
+                                                                                                                      "[0x138] Datarun Offset":  "72",
+                                                                                                                      "[0x13A] Compression Unit Size":  "16kb",
+                                                                                                                      "[-----] Cluster Size":  "4096",
+                                                                                                                      "[0x140] Attribute Allocated Size":  "65.536",
+                                                                                                                      "[0x148] Attribute Actual Size":  "27.026",
+                                                                                                                      "[0x150] Attribute Initialized Size":  "27.026",
+                                                                                                                      "[0x158] Total Allocated size":  "0",
+                                                                                                                      "[-----] Attribute (On-Disk) Slack":  "38510",
+                                                                                                                      "[0x160] DataRun:  0110000000000000":  {
+                                                                                                                                                                 "[ * ] Extend #1":  "[Offset] [ Sparse ] - [Length] 27.026 bytes"
+                                                                                                                                                             }
+                                                                                                                  },
+                                                             "[0x168] ID: 00003, Type: (192) C0000000 - $Reparse_Point ":  {
+                                                                                                                               "[0x16C] Attribute Length":  "248",
+                                                                                                                               "[0x170] Attribute Non-Resident Status":  "Resident",
+                                                                                                                               "[0x171] Length of Stream Name":  "0",
+                                                                                                                               "[0x172] Offset to Stream Name":  "0",
+                                                                                                                               "[0x174] Attribute Flags":  "0x0000",
+                                                                                                                               "[0x176] Attribute ID":  "3",
+                                                                                                                               "[0x178] Resident Content Size":  "222",
+                                                                                                                               "[0x17C] Resident Content Offset":  "24",
+                                                                                                                               "[0x180] Reparse Point Tag Value: 0x9000401A":  {
+                                                                                                                                                                                   "[0x180] Reparse Point Filter: IO_REPARSE_TAG_CLOUD_4":  {
+                                                                                                                                                                                                                                                " bit [0] - Microsoft Tag":  "True",
+                                                                                                                                                                                                                                                " bit [1] - High Latency":  "False",
+                                                                                                                                                                                                                                                " bit [2] - Name surrogate":  "False",
+                                                                                                                                                                                                                                                " bit [3] - Directory can have children":  "True"
+                                                                                                                                                                                                                                            },
+                                                                                                                                                                                   "[0x180] Reparse Point usage":  "Cloud Files filter",
+                                                                                                                                                                                   "[0x184] Size of Reparse Data":  "214",
+                                                                                                                                                                                   "[0x188] Reparse Data":  ""
+                                                                                                                                                                               },
+                                                                                                                               "[0x180] Resident Content":  ""
+                                                                                                                           }
+                                                         },
+                                          "Record Slack":  {
+                                                               "[0x268] Record Slack size":  "3480"
+                                                           }
+                                      }
+}
